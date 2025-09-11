@@ -1,0 +1,42 @@
+:root {
+}
+
+.bg {
+    align-content: center;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.numberLabel {
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+    font-size: 40px;
+    -unity-text-align: middle-center;
+    align-self: center;
+    justify-content: center;
+    align-content: center;
+    position: absolute;
+    align-items: center;
+    flex-grow: 1;
+    -unity-font-definition: url("project://database/Assets/TextMesh%20Pro/Examples%20&%20Extras/Fonts/Bangers.ttf?fileID=12800000&guid=5dd49b3eacc540408c98eee0de38e0f1&type=3#Bangers");
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: rgb(37, 37, 37);
+}
+
+.scoreLabel {
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+    font-size: 36px;
+    -unity-text-align: middle-left;
+    align-self: center;
+    justify-content: center;
+    align-content: center;
+    position: absolute;
+    align-items: center;
+    flex-grow: 1;
+    -unity-font-definition: url("project://database/Assets/TextMesh%20Pro/Examples%20&%20Extras/Fonts/Bangers.ttf?fileID=12800000&guid=5dd49b3eacc540408c98eee0de38e0f1&type=3#Bangers");
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: rgb(37, 37, 37);
+    white-space: normal;
+    text-overflow: clip;
+}
