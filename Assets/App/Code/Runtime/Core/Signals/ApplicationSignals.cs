@@ -11,6 +11,8 @@ namespace Assets.App.Code.Runtime.Core.Signals
 
         public struct Gameplay
         {
+            public struct ActivePause { }
+            public struct ResumePause { }
         }  
     }
 }

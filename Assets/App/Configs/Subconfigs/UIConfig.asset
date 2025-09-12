@@ -13,3 +13,8 @@ MonoBehaviour:
   m_Name: UIConfig
   m_EditorClassIdentifier: Assembly-CSharp::Assets.App.Code.Runtime.Core.Configs.UIConfig
   <SimpleBackgroundScreenPrefab>k__BackingField: {fileID: 3708781301628716658, guid: 47fa9338e956e3fcfb4098154bcea21e, type: 3}
+  <HUDScreenRef>k__BackingField: {fileID: 9197481963319205126, guid: e6cb71e88a07841de86825dbd3c0e360, type: 3}
+  <PauseScreenRef>k__BackingField: {fileID: 9197481963319205126, guid: 5336101152ebbd1bcbc2116d9718db79, type: 3}
+  <WinScreenRef>k__BackingField: {fileID: 9197481963319205126, guid: e3b48e5d5e8d785619f2f053e31724a5, type: 3}
+  <GameOverScreenRef>k__BackingField: {fileID: 9197481963319205126, guid: 0bd335b577ee2cf76ad4060b0184792d, type: 3}
+  <GameMenuStylesRef>k__BackingField: {fileID: 7433441132597879392, guid: 5af5f40533c407796b7eab17af8c38ef, type: 3}
