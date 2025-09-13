@@ -1,4 +1,4 @@
-using Assets.App.Code.Runtime.Core.Configs;
+using Assets.App.Code.Runtime.Data.Configs;
 using Assets.App.Code.Runtime.Services.Scenes.View;
 
 namespace Assets.App.Code.Runtime.Core.SceneManagement.Factory

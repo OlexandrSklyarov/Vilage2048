@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6b94482505b2110fac05bfe3a0d6942, type: 3}
+  m_Name: BoxConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.App.Code.Runtime.Data.Configs.BoxConfig
+  <Box2>k__BackingField: {r: 0.4035135, g: 0.38803193, b: 0.25815883, a: 1}
+  <Box4>k__BackingField: {r: 0.8173183, g: 0.34806302, b: 0.141303, a: 1}
+  <Box8>k__BackingField: {r: 0.74725544, g: 0.07169369, b: 0.07169369, a: 1}
+  <Box16>k__BackingField: {r: 0.8228198, g: 0.16490471, b: 0.5127619, a: 1}
+  <Box32>k__BackingField: {r: 0.6098028, g: 0.16656207, b: 0.73829275, a: 1}
+  <Box64>k__BackingField: {r: 0.21789281, g: 0.13232002, b: 0.7790383, a: 1}
+  <Box128>k__BackingField: {r: 0.24208649, g: 0.64847445, b: 0.78357047, a: 1}
+  <Box256>k__BackingField: {r: 0.24639224, g: 0.68662536, b: 0.46785155, a: 1}
+  <Box512>k__BackingField: {r: 0.30085704, g: 0.966167, b: 0.17554188, a: 1}
+  <Box1024>k__BackingField: {r: 0.9112955, g: 0.98251057, b: 0.21649243, a: 1}
+  <Box2048>k__BackingField: {r: 0.92350394, g: 0.86320794, b: 0, a: 1}
+  <SpawnBigNumChance>k__BackingField: 0.25
+  <MoveSpeed>k__BackingField: 12
+  <PushSpeed>k__BackingField: 1500
+  <CollideBoxForce>k__BackingField: 10
+  <SpawnBoxDelay>k__BackingField: 0.5
+  <MinCollideImpulse>k__BackingField: 0.4

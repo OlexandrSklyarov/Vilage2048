@@ -1,5 +1,5 @@
 using UnityEngine.UIElements;
-using Assets.App.Code.Runtime.Core.Configs;
+using Assets.App.Code.Runtime.Data.Configs;
 
 namespace Assets.App.Code.Runtime.Gameplay.UI
 {

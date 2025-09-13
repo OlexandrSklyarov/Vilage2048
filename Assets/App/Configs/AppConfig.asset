@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e95f76dfaed60c5398d152a8c25acab5, type: 3}
   m_Name: AppConfig
   m_EditorClassIdentifier: Assembly-CSharp::Assets.App.Code.Runtime.Core.Configs.AppConfig
+  <UI>k__BackingField: {fileID: 11400000, guid: a2c915b24847cfad886a31c0128462d7, type: 2}
+  <Factory>k__BackingField: {fileID: 11400000, guid: 29af971720b90a9d39a4af231a2253a6, type: 2}
+  <BoxInfo>k__BackingField: {fileID: 11400000, guid: acc8cd8c8aa3e6c98a7e0406eb3ce40e, type: 2}
   <Maps>k__BackingField:
   - {fileID: 11400000, guid: aaa49af79db703c4b91b0ce01b3b3507, type: 2}
-  <UI>k__BackingField: {fileID: 11400000, guid: a2c915b24847cfad886a31c0128462d7, type: 2}

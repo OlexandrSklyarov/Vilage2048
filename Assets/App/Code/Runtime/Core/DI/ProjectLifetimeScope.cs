@@ -1,13 +1,14 @@
 using VContainer;
 using VContainer.Unity;
 using UnityEngine;
-using Assets.App.Code.Runtime.Core.Configs;
+using Assets.App.Code.Runtime.Data.Configs;
 using Assets.App.Code.Runtime.Services.Scenes.Operations;
 using Assets.App.Code.Runtime.Boot.FSM;
 using Assets.App.Code.Runtime.Boot.FSM.States;
 using Assets.App.Code.Runtime.Services.Scenes.View;
 using Assets.App.Code.Runtime.Core.Signals;
 using Assets.App.Code.Runtime.Core.SceneManagement.Factory;
+using Assets.App.Code.Runtime.Core.Time;
 
 namespace Assets.App.Code.Runtime.Core.DI
 {
@@ -55,9 +56,11 @@ namespace Assets.App.Code.Runtime.Core.DI
         {
             builder.Register<SignalBus>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
 
-            builder.Register<LoadingScreenProvider>(Lifetime.Singleton).AsImplementedInterfaces(); 
+            builder.Register<LoadingScreenProvider>(Lifetime.Singleton).AsImplementedInterfaces();
 
-            builder.Register<LoadingScreenFactory>(Lifetime.Singleton).AsImplementedInterfaces();            
+            builder.Register<LoadingScreenFactory>(Lifetime.Singleton).AsImplementedInterfaces();
+
+            builder.Register<GameTimeService>(Lifetime.Singleton).AsImplementedInterfaces();         
         }
     }
 }

@@ -1021,7 +1021,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4884783786913420883}
-  - component: {fileID: 8174317194189545309}
+  - component: {fileID: 8174867237793987125}
   m_Layer: 0
   m_Name: Map1
   m_TagString: Untagged
@@ -1048,7 +1048,7 @@ Transform:
   - {fileID: 2668844949794626783}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8174317194189545309
+--- !u!114 &8174867237793987125
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1057,9 +1057,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1284390015033195676}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4174f28fc29d57f4db6b00bfa1dfe020, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e714a9bbaa97428bb51d8d051a39233, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Assets.App.Code.Runtime.Gameplay.Map.MapController
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.App.Code.Runtime.Gameplay.Map.MapViewProvider
+  <BoxSpawnPoint>k__BackingField: {fileID: 2668844949794626783}
+  <FieldBounds>k__BackingField:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 3.28, y: 0, z: 7.5}
 --- !u!1 &1301893851842712042
 GameObject:
   m_ObjectHideFlags: 0
@@ -1196,7 +1200,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1419430914059921299}
   - component: {fileID: 16893795604622111}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2548,7 +2552,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4563087609733810211}
   - component: {fileID: 7989808809097734376}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2601,7 +2605,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2668844949794626783}
   m_Layer: 0
-  m_Name: CreateBoxPoint
+  m_Name: BoxSpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3224,7 +3228,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4529166649569342985}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 554e7413cd383bcb0bcde3217247cdb4, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3772,7 +3776,7 @@ GameObject:
   m_Component:
   - component: {fileID: 11949557106332678}
   - component: {fileID: 197493453510684574}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3923,7 +3927,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4481196786088784369}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
