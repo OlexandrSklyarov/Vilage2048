@@ -10,16 +10,19 @@ namespace Assets.App.Code.Runtime.MainMenu
     {
         private Button _playButton;
         private SignalBus _signalBus;
+        private VisualElement _root;
 
         [Inject]
         private void Construct(SignalBus signalBus)
         {
-            _signalBus = signalBus;
-            
-            var root = GetComponent<UIDocument>().rootVisualElement;
+            _signalBus = signalBus;              
+        }
 
-            _playButton = root.Q<Button>("PlayButton");
-            _playButton.clicked += OnPlayButtonClicked;
+        void Awake()
+        {
+            _root = GetComponent<UIDocument>().rootVisualElement;
+            _playButton = _root.Q<Button>("PlayButton");
+            _playButton.clicked += OnPlayButtonClicked;      
         }
         
         private void OnDestroy()

@@ -121,7 +121,7 @@ namespace App.Code.Runtime.Gameplay.Process
 
         private Vector3 GetPushForce(Transform box)
         {
-            return box.transform.forward * _appConfig.BoxInfo.PushSpeed * _timeService.DeltaTime;
+            return box.transform.forward * _appConfig.BoxInfo.PushForce;
         }
 
         private Vector3 GetMoveVelocity(Transform box)

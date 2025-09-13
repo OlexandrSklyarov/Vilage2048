@@ -25,7 +25,7 @@ MonoBehaviour:
   <Box2048>k__BackingField: {r: 0.92350394, g: 0.86320794, b: 0, a: 1}
   <SpawnBigNumChance>k__BackingField: 0.25
   <MoveSpeed>k__BackingField: 12
-  <PushSpeed>k__BackingField: 1500
+  <PushForce>k__BackingField: 35
   <CollideBoxForce>k__BackingField: 10
   <SpawnBoxDelay>k__BackingField: 0.5
   <MinCollideImpulse>k__BackingField: 0.4

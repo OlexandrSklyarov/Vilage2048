@@ -14,7 +14,6 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
         private readonly SignalBus _signalBus;
         private readonly BoxFactory _boxFactory;
         private readonly GameScoreServices _gameScoreServices;
-        private bool _isCanHandle;
 
         public BoxCollisionHandleService(
             AppConfig appConfig,
@@ -31,7 +30,6 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
         public async UniTask InitializeAsync()
         {
             _signalBus.Subscribe<Signal.GameEvent.BoxCollision>(OnBoxCollision);
-            _isCanHandle = true;
             await UniTask.CompletedTask;
         }
 
@@ -70,15 +68,19 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
         {
             if (nextNumber >= 2048)
             {
-                _isCanHandle = false;
+                UnSubscribe();
                 _signalBus.Fire(new Signal.Gameplay.Win());
             }
         }
 
-        public void Cleanup()
+        private void UnSubscribe()
         {
             _signalBus.UnSubscribe<Signal.GameEvent.BoxCollision>(OnBoxCollision);
-            _isCanHandle = false;
+        }
+
+        public void Cleanup()
+        {
+            UnSubscribe();
         }
 
         public void Dispose() => Cleanup();

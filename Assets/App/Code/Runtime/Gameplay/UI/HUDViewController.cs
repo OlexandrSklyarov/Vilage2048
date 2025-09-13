@@ -10,6 +10,10 @@ namespace Assets.App.Code.Runtime.Gameplay.UI
         [Inject]
         private void Construct()
         {
+        }
+
+        private void Awake()
+        {
             var root = GetComponent<UIDocument>().rootVisualElement;
         }
     }
