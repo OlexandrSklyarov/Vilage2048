@@ -15,7 +15,6 @@ namespace Assets.App.Code.Runtime.Core.Configs
         [field: SerializeField] public VisualTreeAsset GameOverScreenRef  { get; private set; }
         
         [field: Space, SerializeField] public StyleSheet GameMenuStylesRef  { get; private set; }
-
     }
 }
 

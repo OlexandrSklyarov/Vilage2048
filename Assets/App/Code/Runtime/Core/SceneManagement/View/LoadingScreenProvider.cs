@@ -1,31 +1,23 @@
 using UnityEngine;
-using VContainer;
-using VContainer.Unity;
 using System.Collections.Generic;
 using Assets.App.Code.Runtime.Services.Scenes.Operations;
 using Cysharp.Threading.Tasks;
-using Assets.App.Code.Runtime.Core.Configs;
+using Assets.App.Code.Runtime.Core.SceneManagement.Factory;
 
 namespace Assets.App.Code.Runtime.Services.Scenes.View
 {
     public class LoadingScreenProvider : ILoadingScreenProvider
     {
-        private readonly AppConfig _appConfig;
+        private readonly ILoadingScreenFactory _factory;
 
-        public LoadingScreenProvider(AppConfig appConfig)
+        public LoadingScreenProvider(ILoadingScreenFactory factory)
         {
-            _appConfig = appConfig; 
+            _factory = factory; 
         }
 
         public async UniTask LoadAsync(Queue<ILoadingOperation> operations, ScreenType type = ScreenType.SimpleBackground, string showMsg = null)
-        {
-            var prefab = type switch
-            {
-                ScreenType.SimpleBackground => _appConfig.UI.SimpleBackgroundScreenPrefab,
-                _ => throw new System.ArgumentOutOfRangeException(nameof(type), type, null)
-            };
-
-            var loadingScreen = UnityEngine.Object.Instantiate(prefab) as ILoadingScreen;
+        {     
+            var loadingScreen = _factory.Create(type);           
 
             loadingScreen.Show();
 
@@ -35,9 +27,9 @@ namespace Assets.App.Code.Runtime.Services.Scenes.View
 
             await loadingScreen.LoadAsync(operations, showMsg);
 
-            loadingScreen.Hide();
+            loadingScreen.Hide();            
 
-            loadingScreen.Reclaim();
+            _factory.Reclaim(loadingScreen);
 
             Application.backgroundLoadingPriority = previousPriority;
         }       

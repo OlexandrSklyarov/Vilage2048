@@ -23,7 +23,6 @@ namespace Assets.App.Code.Runtime.Boot.FSM.States
 
         public async UniTask Enter()
         {
-            Util.DebugLog.PrintCyan("GameLoadingState");
             await LoadGameAsync();
         }
 

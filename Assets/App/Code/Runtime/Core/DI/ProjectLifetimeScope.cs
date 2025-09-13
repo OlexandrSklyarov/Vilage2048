@@ -7,6 +7,7 @@ using Assets.App.Code.Runtime.Boot.FSM;
 using Assets.App.Code.Runtime.Boot.FSM.States;
 using Assets.App.Code.Runtime.Services.Scenes.View;
 using Assets.App.Code.Runtime.Core.Signals;
+using Assets.App.Code.Runtime.Core.SceneManagement.Factory;
 
 namespace Assets.App.Code.Runtime.Core.DI
 {
@@ -54,7 +55,9 @@ namespace Assets.App.Code.Runtime.Core.DI
         {
             builder.Register<SignalBus>(Lifetime.Singleton).AsSelf().AsImplementedInterfaces();
 
-            builder.Register<LoadingScreenProvider>(Lifetime.Singleton).AsImplementedInterfaces();          
+            builder.Register<LoadingScreenProvider>(Lifetime.Singleton).AsImplementedInterfaces(); 
+
+            builder.Register<LoadingScreenFactory>(Lifetime.Singleton).AsImplementedInterfaces();            
         }
     }
 }

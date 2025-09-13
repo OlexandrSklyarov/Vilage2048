@@ -7,15 +7,7 @@ namespace Assets.App.Code.Runtime.Core.Signals
     public sealed class SignalBus : IDisposable
     {
         private readonly Dictionary<Type, List<PriorityCallback>> _signals = new();
-        private readonly bool _isShowDebug;
-        private object _currentState;
-
-        public SignalBus()
-        {
-            #if UNITY_EDITOR
-            _isShowDebug = true;
-            #endif
-        }
+        private object _currentState;      
 
         public void Subscribe<T>(Action<T> action, int priority = 0, bool isNotify = false)
         {
@@ -36,8 +28,6 @@ namespace Assets.App.Code.Runtime.Core.Signals
             {
                 action?.Invoke((T)_currentState);
             }        
-
-            TryShowRegisterSignals("[ADD_SIGNAL]");
         }
 
         public void UnSubscribe<T>(Action<T> action)
@@ -52,8 +42,6 @@ namespace Assets.App.Code.Runtime.Core.Signals
                 {
                     _signals[key].Remove(callbackToDelete);
                 }
-
-                TryShowRegisterSignals("[REMOVE_SIGNAL]");
             }
         }        
 
@@ -73,24 +61,7 @@ namespace Assets.App.Code.Runtime.Core.Signals
                     callback?.Invoke(signal);
                 }
             }
-        }  
-
-        private void TryShowRegisterSignals(string operation)
-        {
-            if (!_isShowDebug) return;
-
-        #if UNITY_EDITOR
-
-            UnityEngine.Debug.Log($"{operation} ******************");
-            int i = 0;
-            foreach (var item in _signals)
-            {
-                UnityEngine.Debug.LogWarning($"[{i}] Signal key :: {item.Key} :: subscribers: {item.Value.Count}");
-                i++;
-            }
-
-        #endif
-        }     
+        }             
 
         public void Dispose()
         {
