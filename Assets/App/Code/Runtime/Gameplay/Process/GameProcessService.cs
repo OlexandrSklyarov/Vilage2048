@@ -124,8 +124,14 @@ namespace App.Code.Runtime.Gameplay.Process
 
         private Vector3 GetMoveVelocity(Transform box)
         {
+            var moveSpeed = _appConfig.BoxInfo.MoveSpeed;
+
+        #if UNITY_EDITOR
+            moveSpeed *= 2f;
+        #endif
+
             var speed = _inputService.InputData.Phase == UnityEngine.InputSystem.TouchPhase.Moved
-                ? _appConfig.BoxInfo.MoveSpeed
+                ? moveSpeed
                 : 0f;
 
             var dir = _inputService.InputData.EndPosition - _prevPosition;
