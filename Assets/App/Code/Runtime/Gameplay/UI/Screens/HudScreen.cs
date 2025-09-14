@@ -16,7 +16,10 @@ namespace Assets.App.Code.Runtime.Gameplay.UI.Screens
         private CompositeDisposable _disposables = new();
 
 
-        public HudScreen(UIScreenFactory screenFactory, SignalBus signalBus, ScoreViewModel scoreViewModel)
+        public HudScreen(
+            UIScreenFactory screenFactory,
+            SignalBus signalBus,
+            ScoreViewModel scoreViewModel)
         {
             _screenFactory = screenFactory;
             _signalBus = signalBus;
@@ -40,7 +43,7 @@ namespace Assets.App.Code.Runtime.Gameplay.UI.Screens
             await UniTask.CompletedTask;
         }      
 
-        private void SetScore(int score) => _scoreLabel.text = $"{score}";
+        private void SetScore(string scoreText) => _scoreLabel.text = scoreText;
 
         private void OnPressMenuButton()
         {

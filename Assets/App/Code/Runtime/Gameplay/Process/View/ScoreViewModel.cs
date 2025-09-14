@@ -5,7 +5,7 @@ namespace Assets.App.Code.Runtime.Gameplay.Process.View
 {
     public sealed class ScoreViewModel : IDisposable
     {
-        public ReactiveProperty<int> CurrentScore = new(0);
+        public ReactiveProperty<string> CurrentScore = new();
 
         private readonly GameScoreServices _scoreServices;
         private CompositeDisposable _disposables = new();
@@ -21,7 +21,7 @@ namespace Assets.App.Code.Runtime.Gameplay.Process.View
         {
             _disposables.Add
             (
-                _scoreServices.CurrentScore.Subscribe(score => CurrentScore.Value += score)
+                _scoreServices.CurrentScore.Subscribe(score => CurrentScore.Value = $"{score}")
             );
         }
 

@@ -28,4 +28,4 @@ MonoBehaviour:
   <PushForce>k__BackingField: 35
   <CollideBoxForce>k__BackingField: 10
   <SpawnBoxDelay>k__BackingField: 0.5
-  <MinCollideImpulse>k__BackingField: 0.4
+  <MinCollideImpulse>k__BackingField: 6
