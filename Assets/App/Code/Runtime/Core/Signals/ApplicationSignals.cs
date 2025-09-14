@@ -34,7 +34,9 @@ namespace Assets.App.Code.Runtime.Core.Signals
         {
             public struct BoxCollision
             {
-                public (BoxView self, BoxView other, float impulseMagnitude) CollidePair;
+                public BoxView SelfItem;
+                public BoxView OtherItem;
+                public float ImpulseMagnitude;
             }
         } 
     }

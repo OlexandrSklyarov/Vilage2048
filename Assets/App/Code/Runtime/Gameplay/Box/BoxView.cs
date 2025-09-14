@@ -16,6 +16,8 @@ namespace Assets.App.Code.Runtime.Gameplay.Box
         private bool _isInteractable;
         private bool _isCanMove;
         private Vector3 _nextPosition;
+        
+        private readonly int _colorPropertyID = Shader.PropertyToID("_BaseColor");
 
         private void Awake()
         {
@@ -75,7 +77,7 @@ namespace Assets.App.Code.Runtime.Gameplay.Box
         public void SetColor(Color color)
         {
             _propertyBlock ??= new MaterialPropertyBlock();
-            _propertyBlock.SetColor("_BaseColor", color);
+            _propertyBlock.SetColor(_colorPropertyID, color);
             _renderer.SetPropertyBlock(_propertyBlock);
         }
 
@@ -97,13 +99,18 @@ namespace Assets.App.Code.Runtime.Gameplay.Box
 
             if (collision.gameObject.TryGetComponent<BoxView>(out var other))
             {
-                BoxCollidedEvent((this, other, collision.impulse.magnitude));
+                BoxCollidedEvent(this, other, collision.impulse.magnitude);
             }
         }
 
-        private void BoxCollidedEvent((BoxView self, BoxView other, float impulseMagnitude) collidePair)
+        private void BoxCollidedEvent(BoxView self, BoxView other, float impulseMagnitude)
         {
-            _signalBus.Fire(new Signal.GameEvent.BoxCollision { CollidePair = collidePair });
+            _signalBus.Fire(new Signal.GameEvent.BoxCollision
+            {
+                SelfItem = self,
+                OtherItem = other,
+                ImpulseMagnitude = impulseMagnitude
+            });
         }
     }
 }

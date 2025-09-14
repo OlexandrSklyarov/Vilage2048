@@ -35,33 +35,52 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
 
         private void OnBoxCollision(Signal.GameEvent.BoxCollision evt)
         {
-            var pair = evt.CollidePair;
-
-            if (pair.other != null && pair.self.Number == pair.other.Number &&
-                evt.CollidePair.impulseMagnitude >= _appConfig.BoxInfo.MinCollideImpulse)
+            if (IsCanMergeItems(evt))
             {
-                var num = pair.self.Number;
-                var nextNumber = num * 2;
+                var score = evt.SelfItem.Number;
+                
+                var newNumber = score * 2;
 
-                _gameScoreServices.AddScore(num);
+                AddScore(score);
 
-                var newBox = _boxFactory.Create
-                (
-                    pair.other.transform.position,
-                    pair.other.transform.rotation,
-                    nextNumber
-                );
+                CreateNewBox(evt, newNumber);
 
-                var force = (pair.other.transform.position - pair.self.transform.position).normalized +
-                    Vector3.up * _appConfig.BoxInfo.CollideBoxForce;
+                RemoveOldBoxes(evt);
 
-                newBox.Push(force);
-
-                pair.self.Reclaim();
-                pair.other.Reclaim();
-
-                CheckWin(nextNumber);
+                CheckWin(newNumber);
             }
+        }
+
+        private void AddScore(int score)
+        {
+            _gameScoreServices.AddScore(score);
+        }
+
+        private bool IsCanMergeItems(Signal.GameEvent.BoxCollision evt)
+        {
+            return evt.OtherItem != null && evt.SelfItem.Number == evt.OtherItem.Number &&
+                evt.ImpulseMagnitude >= _appConfig.BoxInfo.MinCollideImpulse;
+        }
+
+        private static void RemoveOldBoxes(Signal.GameEvent.BoxCollision evt)
+        {
+            evt.SelfItem.Reclaim();
+            evt.OtherItem.Reclaim();
+        }
+
+        private void CreateNewBox(Signal.GameEvent.BoxCollision evt, int number)
+        {
+            var newBox = _boxFactory.Create
+            (
+                evt.OtherItem.transform.position,
+                evt.OtherItem.transform.rotation,
+                number
+            );
+
+            var force = (evt.OtherItem.transform.position - evt.SelfItem.transform.position).normalized +
+                Vector3.up * _appConfig.BoxInfo.CollideBoxForce;
+
+            newBox.Push(force);
         }
 
         private void CheckWin(int nextNumber)
