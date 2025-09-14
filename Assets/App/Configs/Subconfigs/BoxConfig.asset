@@ -23,9 +23,10 @@ MonoBehaviour:
   <Box512>k__BackingField: {r: 0.30085704, g: 0.966167, b: 0.17554188, a: 1}
   <Box1024>k__BackingField: {r: 0.9112955, g: 0.98251057, b: 0.21649243, a: 1}
   <Box2048>k__BackingField: {r: 0.92350394, g: 0.86320794, b: 0, a: 1}
+  <DefaultBoxColor>k__BackingField: {r: 0, g: 0, b: 0, a: 1}
   <SpawnBigNumChance>k__BackingField: 0.25
   <MoveSpeed>k__BackingField: 12
   <PushForce>k__BackingField: 35
   <CollideBoxForce>k__BackingField: 10
-  <SpawnBoxDelay>k__BackingField: 0.5
-  <MinCollideImpulse>k__BackingField: 6
+  <SpawnBoxDelay>k__BackingField: 0.35
+  <MinCollideImpulse>k__BackingField: 4

@@ -23,6 +23,7 @@ namespace Assets.App.Code.Runtime.Gameplay.Box
         {
             _rb = GetComponent<Rigidbody>();
             _rb.isKinematic = true;
+            
             _renderer = GetComponentInChildren<MeshRenderer>();
             _numViews = GetComponentsInChildren<BoxUI>();
         }
