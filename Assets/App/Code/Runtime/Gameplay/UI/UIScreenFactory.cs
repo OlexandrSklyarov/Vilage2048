@@ -30,7 +30,7 @@ namespace Assets.App.Code.Runtime.Gameplay.UI
             );
         }
 
-        public VisualElement CreateGameResultScreen()
+        public VisualElement CreateWinScreen()
         {
             return Create
             (
@@ -48,9 +48,9 @@ namespace Assets.App.Code.Runtime.Gameplay.UI
             );
         }
 
-        private VisualElement Create(VisualTreeAsset screenAsset, StyleSheet styles, string rootName = "root")
+        private VisualElement Create(VisualTreeAsset screenAsset, StyleSheet styles, string rootName = "Background")
         {
-            var root = screenAsset.Instantiate().Q(rootName);
+            var root = screenAsset.Instantiate();
             root.styleSheets.Add(styles);
 
             return root;

@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace Assets.App.Code.Runtime.Gameplay.UI.Screens
 {
-    public sealed class PauseScreen : BaseHudScreen
+    public sealed class PauseScreen : BaseScreen
     {
         private readonly UIScreenFactory _screenFactory;
         private readonly SignalBus _signalBus;
@@ -20,7 +20,7 @@ namespace Assets.App.Code.Runtime.Gameplay.UI.Screens
 
         public override async UniTask InitializeAsync()
         {
-            Root = _screenFactory.CreateHUDScreen();
+            Root = _screenFactory.CreatePauseScreen();
 
             _menuButton = Root.Q<Button>("MenuButton");
             _closeButton = Root.Q<Button>("CloseButton");
@@ -29,26 +29,13 @@ namespace Assets.App.Code.Runtime.Gameplay.UI.Screens
             _closeButton.clicked += OnPressCloseButton;
 
             await UniTask.CompletedTask;
-        }
+        }       
 
         public override void Dispose()
         {
             _menuButton.clicked -= OnPressMenuButton;
             _closeButton.clicked -= OnPressCloseButton;
-        }
-
-        public override void Show(VisualElement container)
-        {
-            base.Show(container);
-
-            //subscribe with added dispose handler            
-        }
-
-        public override void Hide()
-        {
-            Dispose();
-            base.Hide();
-        }
+        }              
 
         private void OnPressMenuButton()
         {

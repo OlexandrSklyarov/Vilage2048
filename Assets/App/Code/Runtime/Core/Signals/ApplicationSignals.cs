@@ -16,7 +16,7 @@ namespace Assets.App.Code.Runtime.Core.Signals
             public struct HUD { }
             public struct PauseMenu { }
             public struct WinScreen { }
-            public struct LoseScreen { }
+            public struct GameOverScreen { }
         }
 
         public struct Gameplay

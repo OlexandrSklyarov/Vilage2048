@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Assets.App.Code.Runtime.Gameplay.UI.Screens
 {
-    public abstract class BaseHudScreen : IDisposable
+    public abstract class BaseScreen : IDisposable
     {
         public VisualElement Root { get; protected set; }
         public bool IsVisible => Root?.parent != null;

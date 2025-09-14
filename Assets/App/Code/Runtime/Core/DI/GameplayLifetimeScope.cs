@@ -11,6 +11,7 @@ using Assets.App.Code.Runtime.Gameplay.Pause;
 using Assets.App.Code.Runtime.Gameplay.UI;
 using Assets.App.Code.Runtime.Gameplay.UI.Screens;
 using Assets.App.Code.Runtime.Gameplay.Process;
+using Assets.App.Code.Runtime.Gameplay.Process.View;
 
 namespace Assets.App.Code.Runtime.Core.DI
 {
@@ -52,6 +53,8 @@ namespace Assets.App.Code.Runtime.Core.DI
 
             builder.Register<GameScoreServices>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
+            builder.Register<ScoreViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+
             builder.Register<BoxFactory>(Lifetime.Transient);            
         }
 
@@ -59,15 +62,17 @@ namespace Assets.App.Code.Runtime.Core.DI
         {            
             builder.Register<UIScreenFactory>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
-            builder.Register<BaseHudScreen, GameplayScreen>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
-            builder.Register<BaseHudScreen, PauseScreen>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<BaseScreen, HudScreen>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<BaseScreen, PauseScreen>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<BaseScreen, WinScreen>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<BaseScreen, GameOverScreen>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         }
 
         private void RegistrationHierarchy(IContainerBuilder builder)
         {
             builder.RegisterComponentInHierarchy<GameplayBootstrap>();
             
-            builder.RegisterComponentInHierarchy<HUDViewController>();
+            builder.RegisterComponentInHierarchy<GameScreenController>().AsImplementedInterfaces();
         }
     }
 }

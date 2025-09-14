@@ -36,7 +36,7 @@ namespace Assets.App.Code.Runtime.Gameplay.FSM.States
 
         public async UniTask Exit() =>  await UniTask.CompletedTask;
 
-        private void ShowGameOverScreen() =>_signalBus.Fire(new Signal.ShowGameplayScreen.LoseScreen());
+        private void ShowGameOverScreen() =>_signalBus.Fire(new Signal.ShowGameplayScreen.GameOverScreen());
 
         private void DisablePlayerInput() => _inputService.Disable();                   
 

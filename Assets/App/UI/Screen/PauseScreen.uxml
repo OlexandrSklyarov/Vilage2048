@@ -2,5 +2,7 @@
     <Style src="project://database/Assets/App/UI/Screen/GameMenuStyles.uss?fileID=7433441132597879392&amp;guid=5af5f40533c407796b7eab17af8c38ef&amp;type=3#GameMenuStyles" />
     <ui:VisualElement name="Background" class="pauseBG" style="flex-grow: 1;">
         <ui:Button text="Menu" name="MenuButton" class="menuButton" />
+        <ui:Button name="CloseButton" class="menuCloseButton pauseCloseButton" />
+        <ui:Label text="Pause" class="pauseLabel" />
     </ui:VisualElement>
 </ui:UXML>
