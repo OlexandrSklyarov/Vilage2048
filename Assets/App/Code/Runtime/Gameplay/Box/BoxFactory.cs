@@ -26,6 +26,8 @@ namespace Assets.App.Code.Runtime.Gameplay.Box
             box.Init(_signalBus, this);
             box.SetColor(GetColor(num));
             box.SetNumber(num);
+
+            _signalBus.Fire(new Signal.GameEvent.CreateBox() { Number = num });
             
             return box;
         }
@@ -49,7 +51,11 @@ namespace Assets.App.Code.Runtime.Gameplay.Box
             };
         }
 
-        public void Release(BoxView boxView) => _boxPool.Reclaim(boxView);
+        public void Release(BoxView boxView)
+        {
+            _boxPool.Reclaim(boxView);
+            _signalBus.Fire(new Signal.GameEvent.ReleaseBox());
+        }
     }
 }
 

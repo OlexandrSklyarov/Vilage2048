@@ -7,5 +7,6 @@ namespace Assets.App.Code.Runtime.Gameplay.Map.Data
     {
         [field: SerializeField] public MapViewProvider MapPrefab { get; private set; }
         [field: Space, SerializeField, Min(2)] public int MaxNumberToWin { get; private set; } = 2048;
+        [field: Space, SerializeField, Min(2)] public int MaxBoxOnMap { get; private set; } = 40;
     }
 }

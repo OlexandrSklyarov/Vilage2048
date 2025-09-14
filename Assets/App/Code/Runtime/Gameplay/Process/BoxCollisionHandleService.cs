@@ -5,7 +5,6 @@ using Assets.App.Code.Runtime.Core.Signals;
 using Assets.App.Code.Runtime.Data.Audio;
 using Assets.App.Code.Runtime.Data.Configs;
 using Assets.App.Code.Runtime.Gameplay.Box;
-using Assets.App.Code.Runtime.Gameplay.Map;
 using Assets.App.Code.Runtime.Gameplay.VFX;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -17,8 +16,7 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
         private readonly AppConfig _appConfig;
         private readonly SignalBus _signalBus;
         private readonly BoxFactory _boxFactory;
-        private readonly GameScoreServices _gameScoreServices;
-        private readonly LevelInfoService _levelInfoService;
+        private readonly GameScoreServices _gameScoreServices;        
         private readonly VfxFactory _vfxFactory;
         private readonly IAudioManager _audioManager;
 
@@ -26,8 +24,7 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
             AppConfig appConfig,
             SignalBus signalBus,
             BoxFactory boxFactory,
-            GameScoreServices gameScoreServices,
-            LevelInfoService levelInfoService,
+            GameScoreServices gameScoreServices,            
             VfxFactory vfxFactory,
             IAudioManager audioManager)
         {
@@ -35,7 +32,6 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
             _signalBus = signalBus;
             _boxFactory = boxFactory;
             _gameScoreServices = gameScoreServices;
-            _levelInfoService = levelInfoService;
             _vfxFactory = vfxFactory;
             _audioManager = audioManager;
         }
@@ -59,8 +55,6 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
                 CreateNewBox(evt, newNumber);
 
                 RemoveOldBoxes(evt);
-
-                CheckWin(newNumber);
             }
         }
 
@@ -95,25 +89,7 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
 
             _vfxFactory.Create(GameVfxType.MergeItem, pos, rot);
             _audioManager.PlaySound((int)SfxType.MERGE_HIT);
-        }
-
-        private void CheckWin(int nextNumber)
-        {
-            //Check loss logic...            
-
-            //check win
-            if (nextNumber >= GetMaxNumber())
-            {
-                UnSubscribe();
-                _signalBus.Fire(new Signal.Gameplay.Win());
-            }
-        }
-
-        private int GetMaxNumber()
-        {
-            var indexLvl = _levelInfoService.GetCurrentLevelIndex();
-            return _appConfig.Maps[indexLvl].MaxNumberToWin;
-        }
+        }              
 
         private void UnSubscribe()
         {

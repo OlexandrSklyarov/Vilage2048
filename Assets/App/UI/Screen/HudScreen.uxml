@@ -2,6 +2,7 @@
     <Style src="project://database/Assets/App/UI/Screen/GameMenuStyles.uss?fileID=7433441132597879392&amp;guid=5af5f40533c407796b7eab17af8c38ef&amp;type=3#GameMenuStyles" />
     <ui:VisualElement name="Background" class="hudBG" style="flex-grow: 1;">
         <ui:Button name="MenuButton" class="hudButton hudButtonMenu" style="background-image: url(&quot;project://database/Assets/App/Art/Image/Cog%201.png?fileID=2800000&amp;guid=89d9d106cf4928c759b5bab37489360f&amp;type=3#Cog 1&quot;);" />
-        <ui:Label name="ScoreLabel" text="_" class="hudScoreLabel" />
+        <ui:Label name="ScoreLabel" text="0" class="hudScoreLabel" />
+        <ui:Label name="BoxCountLabel" text="0&#10;" class="hudScoreLabel hudBoxCountLabel" />
     </ui:VisualElement>
 </ui:UXML>

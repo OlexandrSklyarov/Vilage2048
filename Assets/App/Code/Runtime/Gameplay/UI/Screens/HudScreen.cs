@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Assets.App.Code.Runtime.Core.Signals;
 using Assets.App.Code.Runtime.Gameplay.Process.View;
 using Cysharp.Threading.Tasks;
@@ -13,7 +15,8 @@ namespace Assets.App.Code.Runtime.Gameplay.UI.Screens
         private readonly ScoreViewModel _scoreViewModel;
         private Button _menuButton;
         private Label _scoreLabel;
-        private CompositeDisposable _disposables = new();
+        private Label _boxCountLabel;
+        private CompositeDisposable _disposables;
 
 
         public HudScreen(
@@ -32,17 +35,21 @@ namespace Assets.App.Code.Runtime.Gameplay.UI.Screens
 
             _menuButton = Root.Q<Button>("MenuButton");            
             _scoreLabel = Root.Q<Label>("ScoreLabel");            
+            _boxCountLabel = Root.Q<Label>("BoxCountLabel");            
 
             _menuButton.clicked += OnPressMenuButton;
 
-            _disposables.Add
-            (
-                _scoreViewModel.CurrentScore.Subscribe(s => SetScore(s))
-            );
+            _disposables = new CompositeDisposable(new List<IDisposable>()
+            {
+                _scoreViewModel.CurrentScore.Subscribe(s => SetScore(s)),
+                _scoreViewModel.BoxCount.Subscribe(s => SetBoxCount(s))
+            });
                   
             await UniTask.CompletedTask;
-        }      
-
+        }
+       
+        private void SetBoxCount(string countText) => _boxCountLabel.text = countText;
+        
         private void SetScore(string scoreText) => _scoreLabel.text = scoreText;
 
         private void OnPressMenuButton()

@@ -28,7 +28,7 @@ namespace Assets.App.Code.Runtime.Core.Signals
             public struct Restart { }
             public struct NextLevel { }
             public struct ExitToMainMenu { }
-        }  
+        }
 
         public struct GameEvent
         {
@@ -38,6 +38,9 @@ namespace Assets.App.Code.Runtime.Core.Signals
                 public BoxView OtherItem;
                 public float ImpulseMagnitude;
             }
+            
+            public struct CreateBox { public int Number; }
+            public struct ReleaseBox { }
         } 
     }
 }

@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: 1_MapConfig
   m_EditorClassIdentifier: Assembly-CSharp::Assets.App.Code.Runtime.Gameplay.Map.Data.MapConfig
   <MapPrefab>k__BackingField: {fileID: 8174867237793987125, guid: 5faf1bcf455ea8d038bae7b4b9bc85ea, type: 3}
+  <MaxNumberToWin>k__BackingField: 2048
+  <MaxBoxOnMap>k__BackingField: 40

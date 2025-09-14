@@ -56,6 +56,8 @@ namespace Assets.App.Code.Runtime.Core.DI
 
             builder.Register<ScoreViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
+            builder.Register<CheckGameResultService>(Lifetime.Singleton);
+
             builder.Register<BoxFactory>(Lifetime.Singleton); 
 
             builder.Register<VfxFactory>(Lifetime.Singleton);                        

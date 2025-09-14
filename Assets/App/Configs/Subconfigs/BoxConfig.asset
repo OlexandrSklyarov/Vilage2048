@@ -28,5 +28,5 @@ MonoBehaviour:
   <MoveSpeed>k__BackingField: 12
   <PushForce>k__BackingField: 35
   <CollideBoxForce>k__BackingField: 10
-  <SpawnBoxDelay>k__BackingField: 0.35
+  <SpawnBoxDelay>k__BackingField: 0.15
   <MinCollideImpulse>k__BackingField: 4
