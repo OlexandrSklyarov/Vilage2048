@@ -29,12 +29,12 @@ namespace Assets.App.Code.Runtime.Core.DI
         {
             builder.Register<GameplayFSM>(Lifetime.Singleton);
 
-            builder.Register<StartGameplayState>(Lifetime.Transient);
-            builder.Register<GameProcessState>(Lifetime.Transient);
-            builder.Register<WinGameplayState>(Lifetime.Transient);
-            builder.Register<LossGameplayState>(Lifetime.Transient);
-            builder.Register<PauseGameplayState>(Lifetime.Transient);
-            builder.Register<FinishGameplayState>(Lifetime.Transient);
+            builder.Register<StartGameplayState>(Lifetime.Scoped);
+            builder.Register<GameProcessState>(Lifetime.Scoped);
+            builder.Register<WinGameplayState>(Lifetime.Scoped);
+            builder.Register<LossGameplayState>(Lifetime.Scoped);
+            builder.Register<PauseGameplayState>(Lifetime.Scoped);
+            builder.Register<FinishGameplayState>(Lifetime.Scoped);
         }
 
         private void RegistrationServices(IContainerBuilder builder)

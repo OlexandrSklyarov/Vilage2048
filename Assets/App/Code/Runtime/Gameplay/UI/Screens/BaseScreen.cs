@@ -13,7 +13,7 @@ namespace Assets.App.Code.Runtime.Gameplay.UI.Screens
 
         public virtual void Show(VisualElement parent)
         {
-            parent.Add(Root);
+            parent.Add(Root);           
         }
 
         public virtual void Hide()

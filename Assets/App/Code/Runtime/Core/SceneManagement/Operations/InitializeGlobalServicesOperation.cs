@@ -18,7 +18,7 @@ namespace Assets.App.Code.Runtime.Services.Scenes.Operations
             onProgressCallback?.Invoke(0f);
 
             //Simulate some loading time...
-            await UniTask.Delay(500);
+            await UniTask.Delay(100);
 
             onProgressCallback?.Invoke(1f);
         }                

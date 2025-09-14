@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Assets.App.Code.Runtime.Gameplay.Process
 {
-    public sealed class BoxCollisionHandleService : IAsyncInitializeProcess, ICleanup, IDisposable
+    public sealed class BoxCollisionHandleService : IAsyncInitializeProcess, IDisposable
     {
         private readonly AppConfig _appConfig;
         private readonly SignalBus _signalBus;
@@ -95,14 +95,9 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
         private void UnSubscribe()
         {
             _signalBus.UnSubscribe<Signal.GameEvent.BoxCollision>(OnBoxCollision);
-        }
+        }       
 
-        public void Cleanup()
-        {
-            UnSubscribe();
-        }
-
-        public void Dispose() => Cleanup();
+        public void Dispose() => UnSubscribe();
     }
 }
 

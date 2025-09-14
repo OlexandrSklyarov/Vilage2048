@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using VContainer.Unity;
 using Assets.App.Code.Runtime.Core.Input;
@@ -6,7 +7,6 @@ using Assets.App.Code.Runtime.Core.Time;
 using Assets.App.Code.Runtime.Data.Configs;
 using Assets.App.Code.Runtime.Gameplay.Box;
 using Assets.App.Code.Runtime.Gameplay.Map;
-using System;
 
 namespace App.Code.Runtime.Gameplay.Process
 {
@@ -17,7 +17,6 @@ namespace App.Code.Runtime.Gameplay.Process
         private readonly IInputService _inputService;
         private readonly ITimeService _timeService;
         private readonly BoxFactory _boxFactory;
-        private readonly SignalBus _signalBus;
         private BoxView _currentBox;
         private State _gameState = State.None;
         private Vector2 _prevPosition;
@@ -36,19 +35,13 @@ namespace App.Code.Runtime.Gameplay.Process
             _timeService = timeService;
             _appConfig = appConfig;
             _boxFactory = boxFactory;
-            _signalBus = signalBus;
         }
 
         public void Run()
         {
             _gameState = State.Spawn;
             _nextSpawnTimer = _appConfig.BoxInfo.SpawnBoxDelay;
-        }
-
-        private void OnInput(InputData data)
-        {
-            throw new NotImplementedException();
-        }
+        }     
 
         public void Stop()
         {

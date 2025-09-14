@@ -51,6 +51,7 @@ namespace Assets.App.Code.Runtime.Gameplay.UI
         private VisualElement Create(VisualTreeAsset screenAsset, StyleSheet styles, string rootName = "Background")
         {
             var root = screenAsset.Instantiate();
+            root.style.flexGrow = 1;
             root.styleSheets.Add(styles);
 
             return root;

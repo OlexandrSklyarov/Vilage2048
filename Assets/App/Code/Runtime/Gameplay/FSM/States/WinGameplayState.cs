@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using App.Code.Runtime.Gameplay.Process;
-using Assets.App.Code.Runtime.Core.Initializable;
 using Assets.App.Code.Runtime.Core.Input;
 using Assets.App.Code.Runtime.Core.Signals;
 using Assets.App.Code.Runtime.Core.StateMachine;
@@ -9,33 +5,21 @@ using Cysharp.Threading.Tasks;
 
 namespace Assets.App.Code.Runtime.Gameplay.FSM.States
 {
-    public sealed class WinGameplayState : IState, IDisposable
+    public sealed class WinGameplayState : IState
     {
-        private readonly IEnumerable<ICleanup> _cleanupProcesses;
         private readonly GameplayFSM _stateMachine;
         private readonly SignalBus _signalBus;
         private readonly IInputService _inputService;
 
         public WinGameplayState(
-            IEnumerable<ICleanup> cleanupProcesses,
             GameplayFSM stateMachine,
             SignalBus signalBus,
-            IInputService inputService,
-            GameProcessService gameProcess)
+            IInputService inputService)
         {
-            _cleanupProcesses = cleanupProcesses;
             _stateMachine = stateMachine;
             _signalBus = signalBus;
             _inputService = inputService;
-        }
-
-        public void Dispose()
-        {
-            foreach (var item in _cleanupProcesses)
-            {
-                item.Cleanup();
-            }
-        }
+        }        
 
         public async UniTask Enter()
         {

@@ -1,4 +1,5 @@
 using System;
+using App.Code.Runtime.Gameplay.Process;
 using Assets.App.Code.Runtime.Core.Signals;
 using Assets.App.Code.Runtime.Core.StateMachine;
 using Assets.App.Code.Runtime.Gameplay.Pause;
@@ -12,14 +13,17 @@ namespace Assets.App.Code.Runtime.Gameplay.FSM.States
         private readonly GameplayFSM _stateMachine;
         private readonly SignalBus _signalBus;
         private readonly GamePauseService _gamePauseService;
+        private readonly GameProcessService _gameProcessService;
 
         public PauseGameplayState(GameplayFSM stateMachine,
             SignalBus signalBus,
-            GamePauseService gamePauseService)
+            GamePauseService gamePauseService,
+            GameProcessService gameProcessService)
         {
             _stateMachine = stateMachine;
             _signalBus = signalBus;
             _gamePauseService = gamePauseService;
+            _gameProcessService = gameProcessService;
         }
 
         public async UniTask Enter()
@@ -34,6 +38,12 @@ namespace Assets.App.Code.Runtime.Gameplay.FSM.States
             await UniTask.CompletedTask;
         }
 
+        public async UniTask Exit()
+        {            
+            UnSubscribe();
+            await UniTask.CompletedTask;
+        }
+
         private void UnSubscribe()
         {
             _signalBus.UnSubscribe<Signal.Gameplay.ResumePause>(PauseResume);
@@ -42,20 +52,16 @@ namespace Assets.App.Code.Runtime.Gameplay.FSM.States
 
         private void ExitToMainMenu(Signal.Gameplay.ExitToMainMenu evt)
         {
+            _gameProcessService.Stop();
+            _gamePauseService.Disable();
             _signalBus.Fire(new Signal.App.MainMenu());
-        }
+        }       
 
         private void PauseResume(Signal.Gameplay.ResumePause evt)
         {            
             _gamePauseService.Disable();
             _stateMachine.Enter<GameProcessState>().Forget();
-        } 
-
-        public async UniTask Exit()
-        {            
-            UnSubscribe();
-            await UniTask.CompletedTask;
-        }
+        }         
 
         public void Dispose()
         {

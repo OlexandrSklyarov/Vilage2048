@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 
 namespace Assets.App.Code.Runtime.Services.Scenes.Operations
@@ -14,7 +13,7 @@ namespace Assets.App.Code.Runtime.Services.Scenes.Operations
         {
             onProgressCallback?.Invoke(0f);
 
-            await UniTask.WaitForSeconds(0.2f);
+            await UniTask.Delay(100);
 
             onProgressCallback?.Invoke(1f);
         }                

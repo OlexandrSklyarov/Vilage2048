@@ -56,7 +56,7 @@ namespace Assets.App.Code.Runtime.Boot.FSM.States
 
             operations.Enqueue(_operationFactory.Create<RestartGameOperation>());
 
-            await _loadingScreenProvider.LoadAsync(operations, ScreenType.SimpleBackground);
+            await _loadingScreenProvider.LoadAsync(operations);
 
             _fsm.Enter<RestartGameState>().Forget();
         }

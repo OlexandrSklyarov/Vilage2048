@@ -39,7 +39,7 @@ namespace Assets.App.Code.Runtime.Gameplay.UI.Screens
 
         private void OnPressMenuButton()
         {
-            _signalBus.Fire(new Signal.App.MainMenu());
+            _signalBus.Fire(new Signal.Gameplay.ExitToMainMenu());
         }  
         
         private void OnPressCloseButton()
