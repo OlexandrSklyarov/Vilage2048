@@ -12,6 +12,7 @@ using Assets.App.Code.Runtime.Gameplay.UI;
 using Assets.App.Code.Runtime.Gameplay.UI.Screens;
 using Assets.App.Code.Runtime.Gameplay.Process;
 using Assets.App.Code.Runtime.Gameplay.Process.View;
+using Assets.App.Code.Runtime.Gameplay.VFX;
 
 namespace Assets.App.Code.Runtime.Core.DI
 {
@@ -45,7 +46,7 @@ namespace Assets.App.Code.Runtime.Core.DI
 
             builder.Register<GamePauseService>(Lifetime.Singleton);
 
-            builder.Register<GameProcessService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();  
+            builder.Register<GameProcessService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
             builder.Register<TouchInputService>(Lifetime.Singleton).AsImplementedInterfaces();
 
@@ -55,7 +56,9 @@ namespace Assets.App.Code.Runtime.Core.DI
 
             builder.Register<ScoreViewModel>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
-            builder.Register<BoxFactory>(Lifetime.Transient);            
+            builder.Register<BoxFactory>(Lifetime.Singleton); 
+
+            builder.Register<VfxFactory>(Lifetime.Singleton);                        
         }
 
         private void RegistrationScreens(IContainerBuilder builder)

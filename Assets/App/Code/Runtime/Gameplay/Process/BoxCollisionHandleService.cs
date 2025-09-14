@@ -4,6 +4,7 @@ using Assets.App.Code.Runtime.Core.Signals;
 using Assets.App.Code.Runtime.Data.Configs;
 using Assets.App.Code.Runtime.Gameplay.Box;
 using Assets.App.Code.Runtime.Gameplay.Map;
+using Assets.App.Code.Runtime.Gameplay.VFX;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -16,19 +17,22 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
         private readonly BoxFactory _boxFactory;
         private readonly GameScoreServices _gameScoreServices;
         private readonly LevelInfoService _levelInfoService;
+        private readonly VfxFactory _vfxFactory;
 
         public BoxCollisionHandleService(
             AppConfig appConfig,
             SignalBus signalBus,
             BoxFactory boxFactory,
             GameScoreServices gameScoreServices,
-            LevelInfoService levelInfoService)
+            LevelInfoService levelInfoService,
+            VfxFactory vfxFactory)
         {
             _appConfig = appConfig;
             _signalBus = signalBus;
             _boxFactory = boxFactory;
             _gameScoreServices = gameScoreServices;
             _levelInfoService = levelInfoService;
+            _vfxFactory = vfxFactory;
         }
 
         public async UniTask InitializeAsync()
@@ -74,27 +78,22 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
 
         private void CreateNewBox(Signal.GameEvent.BoxCollision evt, int number)
         {
-            var newBox = _boxFactory.Create
-            (
-                evt.OtherItem.transform.position,
-                evt.OtherItem.transform.rotation,
-                number
-            );
+            var pos = evt.OtherItem.transform.position;
+            var rot = evt.OtherItem.transform.rotation;
+
+            var newBox = _boxFactory.Create(pos, rot, number);
 
             var force = (evt.OtherItem.transform.position - evt.SelfItem.transform.position).normalized +
                 Vector3.up * _appConfig.BoxInfo.CollideBoxForce;
 
             newBox.Push(force);
+
+            _vfxFactory.Create(GameVfxType.MergeItem, pos, rot);
         }
 
         private void CheckWin(int nextNumber)
         {
-            //Check loss logic...
-            // if (IsLoss())
-            // {
-            //     UnSubscribe();
-            //     _signalBus.Fire(new Signal.Gameplay.Lose());
-            // }
+            //Check loss logic...            
 
             //check win
             if (nextNumber >= GetMaxNumber())
