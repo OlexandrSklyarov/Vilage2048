@@ -9,6 +9,7 @@ using Assets.App.Code.Runtime.Services.Scenes.View;
 using Assets.App.Code.Runtime.Core.Signals;
 using Assets.App.Code.Runtime.Core.SceneManagement.Factory;
 using Assets.App.Code.Runtime.Core.Time;
+using Assets.App.Code.Runtime.Core.Audio;
 
 namespace Assets.App.Code.Runtime.Core.DI
 {
@@ -28,6 +29,7 @@ namespace Assets.App.Code.Runtime.Core.DI
         private void RegisterConfigs(IContainerBuilder builder)
         {
             builder.RegisterInstance<AppConfig>(_appConfig);
+            builder.RegisterInstance<AudioConfig>(_appConfig.Audio);
         }
 
         private void RegisterLoadingOperations(IContainerBuilder builder)
@@ -60,7 +62,9 @@ namespace Assets.App.Code.Runtime.Core.DI
 
             builder.Register<LoadingScreenFactory>(Lifetime.Singleton).AsImplementedInterfaces();
 
-            builder.Register<GameTimeService>(Lifetime.Singleton).AsImplementedInterfaces();         
+            builder.Register<GameTimeService>(Lifetime.Singleton).AsImplementedInterfaces();  
+
+            builder.Register<AudioManager>(Lifetime.Singleton).AsImplementedInterfaces();         
         }
     }
 }

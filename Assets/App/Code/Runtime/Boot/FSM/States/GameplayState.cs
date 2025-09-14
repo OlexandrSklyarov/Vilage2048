@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Assets.App.Code.Runtime.Core.Audio;
 using Assets.App.Code.Runtime.Core.Signals;
 using Assets.App.Code.Runtime.Core.StateMachine;
+using Assets.App.Code.Runtime.Data.Audio;
 using Assets.App.Code.Runtime.Services.Scenes.Operations;
 using Assets.App.Code.Runtime.Services.Scenes.View;
 using Cysharp.Threading.Tasks;
@@ -14,16 +16,19 @@ namespace Assets.App.Code.Runtime.Boot.FSM.States
         private readonly LoadingOperationFactory _operationFactory;
         private readonly SignalBus _signalBus;
         private readonly ILoadingScreenProvider _loadingScreenProvider;
+        private readonly IAudioManager _audioManager;
 
         public GameplayState(ApplicationFSM fsm,
             LoadingOperationFactory operationFactory,
             SignalBus signalBus,
-            ILoadingScreenProvider loadingScreenProvider)
+            ILoadingScreenProvider loadingScreenProvider,
+            IAudioManager audioManager)
         {
             _fsm = fsm;
             _operationFactory = operationFactory;
             _signalBus = signalBus;
             _loadingScreenProvider = loadingScreenProvider;
+            _audioManager = audioManager;
         }
 
         public async UniTask Enter()
@@ -31,11 +36,14 @@ namespace Assets.App.Code.Runtime.Boot.FSM.States
             _signalBus.Subscribe<Signal.App.MainMenu>(OnMeinMenu);
             _signalBus.Subscribe<Signal.App.RestartGame>(OnRestartGame);
 
+            _audioManager.PlayMusic((int)MusicType.GAME);
+
             await UniTask.CompletedTask;
         }
 
         public async UniTask Exit()
         {
+            _audioManager.StopAllMusic();
             Unsubscribe();
             await UniTask.CompletedTask;
         }
