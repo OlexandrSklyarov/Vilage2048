@@ -1,6 +1,8 @@
 using System;
+using Assets.App.Code.Runtime.Core.Audio;
 using Assets.App.Code.Runtime.Core.Initializable;
 using Assets.App.Code.Runtime.Core.Signals;
+using Assets.App.Code.Runtime.Data.Audio;
 using Assets.App.Code.Runtime.Data.Configs;
 using Assets.App.Code.Runtime.Gameplay.Box;
 using Assets.App.Code.Runtime.Gameplay.Map;
@@ -18,6 +20,7 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
         private readonly GameScoreServices _gameScoreServices;
         private readonly LevelInfoService _levelInfoService;
         private readonly VfxFactory _vfxFactory;
+        private readonly IAudioManager _audioManager;
 
         public BoxCollisionHandleService(
             AppConfig appConfig,
@@ -25,7 +28,8 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
             BoxFactory boxFactory,
             GameScoreServices gameScoreServices,
             LevelInfoService levelInfoService,
-            VfxFactory vfxFactory)
+            VfxFactory vfxFactory,
+            IAudioManager audioManager)
         {
             _appConfig = appConfig;
             _signalBus = signalBus;
@@ -33,6 +37,7 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
             _gameScoreServices = gameScoreServices;
             _levelInfoService = levelInfoService;
             _vfxFactory = vfxFactory;
+            _audioManager = audioManager;
         }
 
         public async UniTask InitializeAsync()
@@ -89,6 +94,7 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
             newBox.Push(force);
 
             _vfxFactory.Create(GameVfxType.MergeItem, pos, rot);
+            _audioManager.PlaySound((int)SfxType.MERGE_HIT);
         }
 
         private void CheckWin(int nextNumber)

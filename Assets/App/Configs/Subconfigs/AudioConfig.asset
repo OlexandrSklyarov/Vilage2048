@@ -18,4 +18,10 @@ MonoBehaviour:
   - _musicId: 1
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: b0069b3fc95cc1a0c847c9518fcd8524, type: 3}
-  <Sounds>k__BackingField: []
+  <Sounds>k__BackingField:
+  - _sfxId: 0
+    <Clips>k__BackingField:
+    - {fileID: 8300000, guid: 8b625e06819b5616486e1097ed843ada, type: 3}
+  - _sfxId: 1
+    <Clips>k__BackingField:
+    - {fileID: 8300000, guid: b877f123ea26492af97d4ce3d2fbf89a, type: 3}

@@ -7,6 +7,8 @@ using Assets.App.Code.Runtime.Core.Time;
 using Assets.App.Code.Runtime.Data.Configs;
 using Assets.App.Code.Runtime.Gameplay.Box;
 using Assets.App.Code.Runtime.Gameplay.Map;
+using Assets.App.Code.Runtime.Core.Audio;
+using Assets.App.Code.Runtime.Data.Audio;
 
 namespace App.Code.Runtime.Gameplay.Process
 {
@@ -17,6 +19,7 @@ namespace App.Code.Runtime.Gameplay.Process
         private readonly IInputService _inputService;
         private readonly ITimeService _timeService;
         private readonly BoxFactory _boxFactory;
+        private readonly IAudioManager _audioManager;
         private BoxView _currentBox;
         private State _gameState = State.None;
         private Vector2 _prevPosition;
@@ -28,13 +31,14 @@ namespace App.Code.Runtime.Gameplay.Process
             ITimeService timeService,
             AppConfig appConfig,
             BoxFactory boxFactory,
-            SignalBus signalBus)
+            IAudioManager audioManager)
         {
             _mapInfo = mapInfo;
             _inputService = inputService;
             _timeService = timeService;
             _appConfig = appConfig;
             _boxFactory = boxFactory;
+            _audioManager = audioManager;
         }
 
         public void Run()
@@ -87,6 +91,8 @@ namespace App.Code.Runtime.Gameplay.Process
                     }
                 case State.Push:
                     {
+                        _audioManager.PlaySound((int)SfxType.PUSH_ITEM);
+
                         _currentBox.Push(GetPushForce(_currentBox.transform));
 
                         _currentBox = null;
