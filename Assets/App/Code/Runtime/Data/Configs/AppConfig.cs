@@ -9,7 +9,7 @@ namespace Assets.App.Code.Runtime.Data.Configs
         [field: Space, SerializeField] public UIConfig UI { get; private set; }
         [field: Space, SerializeField] public FactoryConfig Factory { get; private set; }
         [field: Space, SerializeField] public BoxConfig BoxInfo { get; private set; }
-        [field: Space, SerializeField] public MapConfig[] Maps { get; private set; }       
+        [field: Space, SerializeField] public MapConfig[] Maps { get; private set; }
     }
 }
 

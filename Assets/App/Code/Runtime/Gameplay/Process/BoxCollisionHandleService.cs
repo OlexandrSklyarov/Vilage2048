@@ -3,6 +3,7 @@ using Assets.App.Code.Runtime.Core.Initializable;
 using Assets.App.Code.Runtime.Core.Signals;
 using Assets.App.Code.Runtime.Data.Configs;
 using Assets.App.Code.Runtime.Gameplay.Box;
+using Assets.App.Code.Runtime.Gameplay.Map;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -14,17 +15,20 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
         private readonly SignalBus _signalBus;
         private readonly BoxFactory _boxFactory;
         private readonly GameScoreServices _gameScoreServices;
+        private readonly LevelInfoService _levelInfoService;
 
         public BoxCollisionHandleService(
             AppConfig appConfig,
             SignalBus signalBus,
             BoxFactory boxFactory,
-            GameScoreServices gameScoreServices)
+            GameScoreServices gameScoreServices,
+            LevelInfoService levelInfoService)
         {
             _appConfig = appConfig;
             _signalBus = signalBus;
             _boxFactory = boxFactory;
             _gameScoreServices = gameScoreServices;
+            _levelInfoService = levelInfoService;
         }
 
         public async UniTask InitializeAsync()
@@ -85,11 +89,25 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
 
         private void CheckWin(int nextNumber)
         {
-            if (nextNumber >= 2048)
+            //Check loss logic...
+            // if (IsLoss())
+            // {
+            //     UnSubscribe();
+            //     _signalBus.Fire(new Signal.Gameplay.Lose());
+            // }
+
+            //check win
+            if (nextNumber >= GetMaxNumber())
             {
                 UnSubscribe();
                 _signalBus.Fire(new Signal.Gameplay.Win());
             }
+        }
+
+        private int GetMaxNumber()
+        {
+            var indexLvl = _levelInfoService.GetCurrentLevelIndex();
+            return _appConfig.Maps[indexLvl].MaxNumberToWin;
         }
 
         private void UnSubscribe()
