@@ -26,8 +26,6 @@ namespace Assets.App.Code.Runtime.Gameplay.Process
 
             _signalBus.Subscribe<Signal.GameEvent.CreateBox>(OnCreateBox);
             _signalBus.Subscribe<Signal.GameEvent.ReleaseBox>(OnReleaseBox);
-
-            Util.DebugLog.Print(AliveBoxCount);
         }
 
         private void UnSubscribe()

@@ -29,10 +29,13 @@ namespace Assets.App.Code.Runtime.Gameplay.UI
             }
         }
 
-        public async UniTask InitializeAsync()
+        void Start()
         {
             _screenContainer = GetComponent<UIDocument>().rootVisualElement.Q("RootScreenContainer");
+        }
 
+        public async UniTask InitializeAsync()
+        {
             //screen initialize
             foreach (var screen in _screens)
             {
