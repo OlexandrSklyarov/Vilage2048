@@ -32,6 +32,11 @@ namespace Assets.App.Code.Runtime.Gameplay.Box
             _signalBus = signalBus;
             _boxFactory = boxFactory;
 
+            for (int i = 0; i < _numViews.Length; i++)
+            {
+                _numViews[i].Init();
+            }
+
             _nextPosition = transform.position;
 
             _isInteractable = false;

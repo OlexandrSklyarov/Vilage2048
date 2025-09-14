@@ -17,7 +17,7 @@ namespace Assets.App.Code.Runtime.Gameplay.Box
         {
             _appConfig = appConfig;
             _signalBus = signalBus;
-            _boxPool = new GeneralPool<BoxView>("BoxPool", _appConfig.Factory.BoxPrefab, 10, resolver);
+            _boxPool = new GeneralPool<BoxView>("BoxPool", _appConfig.Factory.BoxPrefab, 1, resolver);
         }
 
         public BoxView Create(Vector3 pos, Quaternion rot, int num)
@@ -45,7 +45,7 @@ namespace Assets.App.Code.Runtime.Gameplay.Box
                 512 => _appConfig.BoxInfo.Box512,
                 1024 => _appConfig.BoxInfo.Box1024,
                 2048 => _appConfig.BoxInfo.Box2048,
-                _ => throw new ArgumentOutOfRangeException(nameof(num), num, null)
+                _ => _appConfig.BoxInfo.DefaultBoxColor
             };
         }
 

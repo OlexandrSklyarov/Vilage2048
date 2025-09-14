@@ -9,18 +9,17 @@ namespace Assets.App.Code.Runtime.Gameplay.Box
         private VisualElement _root;
         private Label _label;
 
+        public void Init()
+        {
+            _root = GetComponent<UIDocument>().rootVisualElement;
+            _label = _root.Q<Label>("NumLabel");
+        }
+
         public void SetNumber(int number)
         {
-            Init();
-            
             _label.text = $"{number}";
         }
 
-        private void Init()
-        {
-            _root ??= GetComponent<UIDocument>().rootVisualElement;
-            _label ??= _root.Q<Label>("NumLabel");
-        }
     }
 }
 

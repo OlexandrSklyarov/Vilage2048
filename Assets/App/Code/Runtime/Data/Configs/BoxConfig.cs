@@ -16,6 +16,7 @@ namespace Assets.App.Code.Runtime.Data.Configs
         [field: Space, SerializeField] public Color Box512 { get; private set; } = Color.grey;
         [field: Space, SerializeField] public Color Box1024 { get; private set; } = Color.grey;
         [field: Space, SerializeField] public Color Box2048 { get; private set; } = Color.grey;
+        [field: Space, SerializeField] public Color DefaultBoxColor { get; private set; } = Color.black;
 
         [field: Space(20), SerializeField, Range(0.01f, 1f)] public float SpawnBigNumChance { get; private set; } = 0.25f;
         [field: Space, SerializeField, Min(1f)] public float MoveSpeed { get; private set; } = 12f;
