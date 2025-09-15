@@ -58,9 +58,9 @@ namespace Assets.App.Code.Runtime.Gameplay.Box
             _rb.AddForce(force, ForceMode.Impulse);
         }
 
-        public void Move(Vector3 pos)
+        public void Move(Vector3 offset)
         {
-            _nextPosition = pos;
+            _nextPosition = _rb.transform.position + offset;
         }
 
         private void FixedUpdate()
