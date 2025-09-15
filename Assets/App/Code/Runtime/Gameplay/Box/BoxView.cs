@@ -58,9 +58,9 @@ namespace Assets.App.Code.Runtime.Gameplay.Box
             _rb.AddForce(force, ForceMode.Impulse);
         }
 
-        public void Move(Vector3 velocity)
+        public void Move(Vector3 pos)
         {
-            _nextPosition = _rb.position + velocity;
+            _nextPosition = pos;
         }
 
         private void FixedUpdate()

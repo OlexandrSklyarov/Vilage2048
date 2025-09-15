@@ -19,9 +19,10 @@ namespace App.Code.Runtime.Gameplay.Process
         private readonly ITimeService _timeService;
         private readonly BoxFactory _boxFactory;
         private readonly IAudioManager _audioManager;
-        private BoxView _currentBox;
         private State _gameState = State.None;
-        private Vector2 _prevPosition;
+        private BoxView _currentBox;
+        private Camera _camera;
+        private Plane _worldPlane;
         private float _nextSpawnTimer;
 
         public GameProcessService(
@@ -44,7 +45,9 @@ namespace App.Code.Runtime.Gameplay.Process
         {
             _gameState = State.Spawn;
             _nextSpawnTimer = _appConfig.BoxInfo.SpawnBoxDelay;
-        }     
+            _camera = Camera.main;
+            _worldPlane = new Plane(Vector3.up, Vector3.zero);
+        }
 
         public void Stop()
         {
@@ -56,113 +59,100 @@ namespace App.Code.Runtime.Gameplay.Process
             switch (_gameState)
             {
                 case State.Spawn:
-                    {
-                        _currentBox = CreateBoxOnPushLine();
+                {
+                    _currentBox = CreateBoxOnPushLine();
+                    _gameState = (_currentBox != null) ? State.Wait : State.None;
 
-                        _gameState = (_currentBox != null) ? State.Wait : State.None;
+                    break;
+                }
 
-                        break;
-                    }
                 case State.Wait:
+                {
+                    if (_inputService.IsPressDown)
                     {
-                        if (_inputService.IsPressDown)
-                        {
-                            _gameState = State.Move;
-                        }
-
-                        break;
+                        _gameState = State.Move;
                     }
+
+                    break;
+                }
+
                 case State.Move:
+                {
+                    if (_currentBox != null)
                     {
-                        if (_currentBox != null)
+                        if (_inputService.IsPressed)
                         {
-                            if (_inputService.IsPressed)
-                            {
-                                _currentBox.Move(GetMoveVelocity(_currentBox.transform));
-                            }
-                            else if (_inputService.IsPressUp)
-                            {
-                                _gameState = State.Push;
-                            }
+                            _currentBox.Move(GetNextPosition(_currentBox.transform));
                         }
-
-                        break;
+                        else if (_inputService.IsPressUp)
+                        {
+                            _gameState = State.Push;
+                        }
                     }
+
+                    break;
+                }
+
                 case State.Push:
-                    {
-                        _audioManager.PlaySound((int)SfxType.PUSH_ITEM);
+                {
+                    _audioManager.PlaySound((int)SfxType.PUSH_ITEM);
+                    _currentBox.Push(GetPushForce(_currentBox.transform));
+                    _currentBox = null;
+                    _gameState = State.CheckResult;
 
-                        _currentBox.Push(GetPushForce(_currentBox.transform));
+                    break;
+                }
 
-                        _currentBox = null;
-
-                        _gameState = State.CheckResult;
-
-                        break;
-                    }
                 case State.CheckResult:
+                {
+                    if (IsCanSpawnBox())
                     {
-                        if (!_timeService.IsTimerEnd(ref _nextSpawnTimer, _appConfig.BoxInfo.SpawnBoxDelay))
-                        {
-                            return;
-                        }
-                        
-                        if (_gameState == State.CheckResult)
-                        {
-                            _gameState = State.Spawn;
-                        }
-
-                        break;
+                        _gameState = State.Spawn;
                     }
+
+                    break;
+                }
             }
-        }        
+        }
+
+        private bool IsCanSpawnBox()
+        {
+            return _timeService.IsTimerEnd(ref _nextSpawnTimer, _appConfig.BoxInfo.SpawnBoxDelay) &&
+                _gameState == State.CheckResult;
+        }
 
         private Vector3 GetPushForce(Transform box)
         {
             return box.transform.forward * _appConfig.BoxInfo.PushForce;
         }
 
-        private Vector3 GetMoveVelocity(Transform box)
+        private Vector3 GetNextPosition(Transform box)
         {
-            var moveSpeed = _appConfig.BoxInfo.MoveSpeed;
-
-        #if UNITY_EDITOR
-            moveSpeed *= 2f;
-        #endif
-
-            var speed = _inputService.InputData.Phase == UnityEngine.InputSystem.TouchPhase.Moved
-                ? moveSpeed
-                : 0f;
-
-            var dir = _inputService.InputData.EndPosition - _prevPosition;
-            _prevPosition = _inputService.InputData.EndPosition;
-
-            var velocity = box.right * dir.normalized.x * speed * _timeService.DeltaTime;
-
-            return ClampVelocity(box.position, velocity);
+            var hitPoint = GetPointerPos(box.position, _inputService.InputData.EndPosition);
+            hitPoint.x = Mathf.Clamp(hitPoint.x, _mapInfo.FieldBounds.min.x, _mapInfo.FieldBounds.max.x);
+            var targetPos = box.transform.position;
+            targetPos.x = hitPoint.x;            
+       
+            return Vector3.MoveTowards(box.position, targetPos, _appConfig.BoxInfo.MoveSpeed * _timeService.DeltaTime);
         }
 
-        private Vector3 ClampVelocity(Vector3 pos, Vector3 velocity)
+        private Vector3 GetPointerPos(Vector3 curPos, Vector2 input)
         {
-            var bounds = _mapInfo.FieldBounds;
+            var ray = _camera.ScreenPointToRay(input);
 
-            if (pos.x + velocity.x < bounds.min.x)
+            if (_worldPlane.Raycast(ray, out var hitDistance))
             {
-                velocity.x = bounds.min.x - pos.x;
-            }
-            else if (pos.x + velocity.x > bounds.max.x)
-            {
-                velocity.x = bounds.max.x - pos.x;
+                curPos = ray.GetPoint(hitDistance);
             }
 
-            return velocity;
-        }
+            return curPos;
+        }       
 
         private BoxView CreateBoxOnPushLine()
         {
             var point = _mapInfo.BoxSpawnPoint;
             var num = (UnityEngine.Random.value < _appConfig.BoxInfo.SpawnBigNumChance) ? 2 : 4;
-            var box = _boxFactory.Create(point.position, point.rotation, num);        
+            var box = _boxFactory.Create(point.position, point.rotation, num);
 
             return box;
         }
@@ -183,4 +173,3 @@ namespace App.Code.Runtime.Gameplay.Process
         }
     }
 }
-
