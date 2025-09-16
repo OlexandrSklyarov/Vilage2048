@@ -7,7 +7,9 @@ namespace Assets.App.Code.Runtime.Data.Configs
     [CreateAssetMenu(fileName = "UIConfig", menuName = "Configs/UIConfig")]
     public sealed class UIConfig : ScriptableObject
     {
-        [field: SerializeField] public SimpleBackgroundScreen SimpleBackgroundScreenPrefab { get; private set; }
+        [field: SerializeField] public bool UseSafeArea { get; private set; }
+
+        [field: Space, SerializeField] public SimpleBackgroundScreen SimpleBackgroundScreenPrefab { get; private set; }
 
         [field: Space, SerializeField] public VisualTreeAsset HUDScreenRef  { get; private set; }
         [field: SerializeField] public VisualTreeAsset PauseScreenRef  { get; private set; }

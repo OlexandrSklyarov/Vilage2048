@@ -50,7 +50,7 @@
 .hudScoreLabel {
     position: absolute;
     left: 50px;
-    top: 100px;
+    top: 50px;
     -unity-text-align: middle-left;
     font-size: 104px;
     -unity-font-definition: url("project://database/Assets/TextMesh%20Pro/Examples%20&%20Extras/Fonts/Bangers.ttf?fileID=12800000&guid=5dd49b3eacc540408c98eee0de38e0f1&type=3#Bangers");
@@ -62,7 +62,7 @@
 .hudBoxCountLabel {
     position: absolute;
     left: 50px;
-    top: 250px;
+    top: 150px;
     -unity-text-align: middle-left;
     font-size: 104px;
     -unity-font-definition: url("project://database/Assets/TextMesh%20Pro/Examples%20&%20Extras/Fonts/Bangers.ttf?fileID=12800000&guid=5dd49b3eacc540408c98eee0de38e0f1&type=3#Bangers");
@@ -86,7 +86,7 @@
 .hudButtonMenu {
     position: absolute;
     left: auto;
-    top: 100px;
+    top: 50px;
     right: 50px;
 }
 

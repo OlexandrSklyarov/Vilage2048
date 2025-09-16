@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 906ff995ad58c3c06aa377dd4c42a8dd, type: 3}
   m_Name: UIConfig
   m_EditorClassIdentifier: Assembly-CSharp::Assets.App.Code.Runtime.Core.Configs.UIConfig
+  <UseSafeArea>k__BackingField: 1
   <SimpleBackgroundScreenPrefab>k__BackingField: {fileID: 3708781301628716658, guid: 47fa9338e956e3fcfb4098154bcea21e, type: 3}
   <HUDScreenRef>k__BackingField: {fileID: 9197481963319205126, guid: e6cb71e88a07841de86825dbd3c0e360, type: 3}
   <PauseScreenRef>k__BackingField: {fileID: 9197481963319205126, guid: 5336101152ebbd1bcbc2116d9718db79, type: 3}
