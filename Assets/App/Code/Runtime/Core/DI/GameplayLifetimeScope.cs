@@ -44,7 +44,7 @@ namespace Assets.App.Code.Runtime.Core.DI
 
             builder.Register<BuildGameLocationService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
-            builder.Register<GamePauseService>(Lifetime.Singleton);
+            builder.Register<GamePauseService>(Lifetime.Singleton).AsImplementedInterfaces();
 
             builder.Register<GameProcessService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
 
@@ -76,8 +76,8 @@ namespace Assets.App.Code.Runtime.Core.DI
         private void RegistrationHierarchy(IContainerBuilder builder)
         {
             builder.RegisterComponentInHierarchy<GameplayBootstrap>();
-            
-            builder.RegisterComponentInHierarchy<GameScreenController>().AsImplementedInterfaces();
+           
+            builder.RegisterComponentInHierarchy<GameScreensController>().AsImplementedInterfaces();
         }
     }
 }

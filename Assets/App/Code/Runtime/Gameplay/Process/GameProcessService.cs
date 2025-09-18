@@ -1,13 +1,14 @@
 using System;
 using UnityEngine;
 using VContainer.Unity;
-using Assets.App.Code.Runtime.Core.Input;
 using Assets.App.Code.Runtime.Core.Time;
 using Assets.App.Code.Runtime.Data.Configs;
 using Assets.App.Code.Runtime.Gameplay.Box;
 using Assets.App.Code.Runtime.Gameplay.Map;
 using Assets.App.Code.Runtime.Core.Audio;
 using Assets.App.Code.Runtime.Data.Audio;
+using Assets.App.Code.Runtime.Core.Input;
+using Assets.App.Code.Runtime.Gameplay.Pause;
 
 namespace App.Code.Runtime.Gameplay.Process
 {
@@ -19,6 +20,7 @@ namespace App.Code.Runtime.Gameplay.Process
         private readonly ITimeService _timeService;
         private readonly BoxFactory _boxFactory;
         private readonly IAudioManager _audioManager;
+        private readonly IPauseService _pauseService;
         private BoxView _currentBox;
         private State _gameState = State.None;
         private Vector2 _prevPosition;
@@ -30,7 +32,8 @@ namespace App.Code.Runtime.Gameplay.Process
             ITimeService timeService,
             AppConfig appConfig,
             BoxFactory boxFactory,
-            IAudioManager audioManager)
+            IAudioManager audioManager,
+            IPauseService pauseService)
         {
             _mapInfo = mapInfo;
             _inputService = inputService;
@@ -38,36 +41,63 @@ namespace App.Code.Runtime.Gameplay.Process
             _appConfig = appConfig;
             _boxFactory = boxFactory;
             _audioManager = audioManager;
+            _pauseService = pauseService;
+
+            _pauseService.ChangePauseEvent += OnChangePause;
+        }        
+
+        public void Dispose()
+        {
+            Stop();
+            _pauseService.ChangePauseEvent -= OnChangePause;
+
         }
+
+        private void OnChangePause(bool isPause)
+        {
+            if (isPause)
+            {
+                _gameState = State.None;
+            }
+            else
+            { 
+                _gameState = State.Wait;
+            }
+        }       
 
         public void Run()
         {
-            _gameState = State.Spawn;
+            SetState(State.Spawn);
             _nextSpawnTimer = _appConfig.BoxInfo.SpawnBoxDelay;
-        }     
+        }       
 
-        public void Stop()
-        {
-            _gameState = State.None;
-        }
+        public void Stop() => SetState(State.None);
+
+        private void SetState(State state) => _gameState = state;
 
         void ITickable.Tick()
-        {
+        {            
             switch (_gameState)
             {
                 case State.Spawn:
                     {
                         _currentBox = CreateBoxOnPushLine();
 
-                        _gameState = (_currentBox != null) ? State.Wait : State.None;
+                        SetState((_currentBox != null) ? State.Wait : State.None);
 
                         break;
                     }
                 case State.Wait:
                     {
+                        if (_currentBox == null)
+                        {
+                            SetState(State.Spawn);
+                            return;
+                        }
+
                         if (_inputService.IsPressDown)
                         {
-                            _gameState = State.Move;
+                            SetState(State.Move);
                         }
 
                         break;
@@ -82,7 +112,7 @@ namespace App.Code.Runtime.Gameplay.Process
                             }
                             else if (_inputService.IsPressUp)
                             {
-                                _gameState = State.Push;
+                                SetState(State.Push);
                             }
                         }
 
@@ -96,7 +126,7 @@ namespace App.Code.Runtime.Gameplay.Process
 
                         _currentBox = null;
 
-                        _gameState = State.CheckResult;
+                        SetState(State.CheckResult);
 
                         break;
                     }
@@ -106,10 +136,10 @@ namespace App.Code.Runtime.Gameplay.Process
                         {
                             return;
                         }
-                        
+
                         if (_gameState == State.CheckResult)
                         {
-                            _gameState = State.Spawn;
+                            SetState(State.Spawn);
                         }
 
                         break;
@@ -130,13 +160,9 @@ namespace App.Code.Runtime.Gameplay.Process
             moveSpeed *= 1.5f;
         #endif
 
-            var speed = _inputService.InputData.Phase == UnityEngine.InputSystem.TouchPhase.Moved
-                ? moveSpeed
-                : 0f;
-
-            var dir = _inputService.InputData.EndPosition - _prevPosition;
-            _prevPosition = _inputService.InputData.EndPosition;
-
+            var speed = _inputService.IsPressed ? moveSpeed : 0f;
+            var dir = _inputService.Data.EndPosition - _prevPosition;
+            _prevPosition = _inputService.Data.EndPosition;
             var velocity = box.right * dir.normalized.x * speed * _timeService.DeltaTime;
 
             return ClampVelocity(box.position, velocity);
@@ -165,12 +191,7 @@ namespace App.Code.Runtime.Gameplay.Process
             var box = _boxFactory.Create(point.position, point.rotation, num);        
 
             return box;
-        }
-
-        public void Dispose()
-        {
-            Stop();
-        }
+        }        
 
         private enum State
         {

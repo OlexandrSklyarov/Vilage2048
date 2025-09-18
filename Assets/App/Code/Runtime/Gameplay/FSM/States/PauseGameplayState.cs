@@ -4,7 +4,6 @@ using Assets.App.Code.Runtime.Core.Signals;
 using Assets.App.Code.Runtime.Core.StateMachine;
 using Assets.App.Code.Runtime.Gameplay.Pause;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 namespace Assets.App.Code.Runtime.Gameplay.FSM.States
 {
@@ -12,12 +11,12 @@ namespace Assets.App.Code.Runtime.Gameplay.FSM.States
     {
         private readonly GameplayFSM _stateMachine;
         private readonly SignalBus _signalBus;
-        private readonly GamePauseService _gamePauseService;
+        private readonly IPauseService _gamePauseService;
         private readonly GameProcessService _gameProcessService;
 
         public PauseGameplayState(GameplayFSM stateMachine,
             SignalBus signalBus,
-            GamePauseService gamePauseService,
+            IPauseService gamePauseService,
             GameProcessService gameProcessService)
         {
             _stateMachine = stateMachine;
@@ -28,7 +27,7 @@ namespace Assets.App.Code.Runtime.Gameplay.FSM.States
 
         public async UniTask Enter()
         {
-            _gamePauseService.EnablePause();
+            _gamePauseService.Enable();
 
             _signalBus.Subscribe<Signal.Gameplay.ResumePause>(PauseResume);
             _signalBus.Subscribe<Signal.Gameplay.ExitToMainMenu>(ExitToMainMenu);

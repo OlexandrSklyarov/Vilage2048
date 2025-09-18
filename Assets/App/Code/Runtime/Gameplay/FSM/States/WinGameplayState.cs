@@ -9,22 +9,17 @@ namespace Assets.App.Code.Runtime.Gameplay.FSM.States
     {
         private readonly GameplayFSM _stateMachine;
         private readonly SignalBus _signalBus;
-        private readonly IInputService _inputService;
 
         public WinGameplayState(
             GameplayFSM stateMachine,
-            SignalBus signalBus,
-            IInputService inputService)
+            SignalBus signalBus)
         {
             _stateMachine = stateMachine;
             _signalBus = signalBus;
-            _inputService = inputService;
         }        
 
         public async UniTask Enter()
         {
-            DisablePlayerInput();
-
             await UniTask.WaitForSeconds(3f);
 
             ShowWin();
@@ -33,8 +28,6 @@ namespace Assets.App.Code.Runtime.Gameplay.FSM.States
         }
 
         public async UniTask Exit() => await UniTask.CompletedTask;
-
-        private void DisablePlayerInput() => _inputService.Disable();
 
         private void ShowWin() => _signalBus.Fire(new Signal.ShowGameplayScreen.WinScreen());
 

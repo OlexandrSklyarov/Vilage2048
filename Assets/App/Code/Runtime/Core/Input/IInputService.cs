@@ -5,20 +5,17 @@ namespace Assets.App.Code.Runtime.Core.Input
 {
     public interface IInputService
     {
-        InputData InputData { get; }
-        Vector2 Direction { get; }
-        bool IsPressed { get; }
+        InputData Data { get; }
+        Vector2 PointerPosition { get; }
         bool IsPressDown { get; }
+        bool IsPressed { get; }
         bool IsPressUp { get; }
-        bool IsPressOnUIElement { get; }
-        bool IsEnabled { get; }
 
-        event Action<InputData> InputTouchEvent;
-        event Action<float> TouchScrollEvent;
+        event Action<InputData> InputUpdateEvent;
+        event Action<Vector2> SwipeEvent;
 
-        void Enable();
-        void Disable();
-        InputData GetInputDataOnTouch();
+        void EnableGameplay();
+        void EnableUI();
     }
 }
 

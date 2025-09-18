@@ -11,11 +11,13 @@ using VContainer;
 namespace Assets.App.Code.Runtime.Gameplay.UI
 {
     [RequireComponent(typeof(UIDocument))]
-    public sealed class GameScreenController : MonoBehaviour, IAsyncInitializeProcess
+    public sealed class GameScreensController : MonoBehaviour, IAsyncInitializeProcess
     {
         private Dictionary<Type, BaseScreen> _screens = new();
-        private VisualElement _screenContainer;
         private SignalBus _signalBus;
+        private VisualElement _rootVisualElement;
+        private VisualElement _screenContainer;
+        private readonly List<VisualElement> _items = new();
 
         [Inject]
         private void Construct(SignalBus signalBus, IEnumerable<BaseScreen> screenCollection)
@@ -31,7 +33,9 @@ namespace Assets.App.Code.Runtime.Gameplay.UI
 
         void Start()
         {
-            _screenContainer = GetComponent<UIDocument>().rootVisualElement.Q("RootScreenContainer");
+            _rootVisualElement = GetComponent<UIDocument>().rootVisualElement;
+            _screenContainer = _rootVisualElement.Q("RootScreenContainer");
+            _screenContainer.pickingMode = PickingMode.Ignore;
         }
 
         public async UniTask InitializeAsync()
@@ -48,25 +52,26 @@ namespace Assets.App.Code.Runtime.Gameplay.UI
             _signalBus.Subscribe<Signal.ShowGameplayScreen.GameOverScreen>(OnShowGameOver);
         }
 
+
         private void Unsubscribe()
         {
             _signalBus.UnSubscribe<Signal.ShowGameplayScreen.HUD>(OnShowHUD);
             _signalBus.UnSubscribe<Signal.ShowGameplayScreen.PauseMenu>(OnShowPauseMenu);
             _signalBus.UnSubscribe<Signal.ShowGameplayScreen.WinScreen>(OnShowWin);
             _signalBus.UnSubscribe<Signal.ShowGameplayScreen.GameOverScreen>(OnShowGameOver);
-        } 
+        }
 
         private void OnShowWin(Signal.ShowGameplayScreen.WinScreen evt)
         {
             HideAllScreens();
             ShowScreen<WinScreen>();
-        }    
+        }
 
         private void OnShowGameOver(Signal.ShowGameplayScreen.GameOverScreen evt)
         {
             HideAllScreens();
             ShowScreen<GameOverScreen>();
-        }        
+        }
 
         private void OnShowPauseMenu(Signal.ShowGameplayScreen.PauseMenu evt)
         {
@@ -92,7 +97,7 @@ namespace Assets.App.Code.Runtime.Gameplay.UI
         {
             if (!_screens.TryGetValue(typeof(T), out var screen))
             {
-                throw new ArgumentException($"not found screen type {typeof(T)}");          
+                throw new ArgumentException($"not found screen type {typeof(T)}");
             }
 
             screen.Show(_screenContainer);
@@ -109,7 +114,7 @@ namespace Assets.App.Code.Runtime.Gameplay.UI
                     item.Dispose();
                 }
             }
-        } 
+        }
     }
 }
 

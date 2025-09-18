@@ -11,22 +11,17 @@ namespace Assets.App.Code.Runtime.Gameplay.FSM.States
     {
         private readonly GameplayFSM _stateMachine;
         private readonly SignalBus _signalBus;
-        private readonly IInputService _inputService;
 
         public LossGameplayState(
             GameplayFSM stateMachine,
-            SignalBus signalBus,
-            IInputService inputService)
+            SignalBus signalBus)
         {
             _stateMachine = stateMachine;
             _signalBus = signalBus;
-            _inputService = inputService;
         }
 
         public async UniTask Enter()
         {
-            DisablePlayerInput();
-
             await UniTask.WaitForSeconds(3f);
 
             ShowGameOverScreen();
@@ -37,9 +32,7 @@ namespace Assets.App.Code.Runtime.Gameplay.FSM.States
 
         public async UniTask Exit() =>  await UniTask.CompletedTask;
 
-        private void ShowGameOverScreen() =>_signalBus.Fire(new Signal.ShowGameplayScreen.GameOverScreen());
-
-        private void DisablePlayerInput() => _inputService.Disable();                   
+        private void ShowGameOverScreen() =>_signalBus.Fire(new Signal.ShowGameplayScreen.GameOverScreen());                 
 
         private void ToFinishState() => _stateMachine.Enter<FinishGameplayState>().Forget();
     }

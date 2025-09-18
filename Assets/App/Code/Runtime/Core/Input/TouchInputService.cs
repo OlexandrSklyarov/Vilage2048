@@ -1,212 +1,84 @@
 using System;
+using Player.Input;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.EnhancedTouch;
-using VContainer.Unity;
-using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
+using static UnityEngine.InputSystem.InputAction;
 
 namespace Assets.App.Code.Runtime.Core.Input
 {
-    public sealed class TouchInputService : IInputService, ITickable, IInputCheckApplicationFocus
-    {
-        InputData IInputService.InputData => _inputData;
-        bool IInputService.IsPressed => IsEnabled && Touchscreen.current.primaryTouch.press.isPressed; 
-        bool IInputService.IsPressDown => IsEnabled && Touchscreen.current.primaryTouch.press.wasPressedThisFrame; 
-        bool IInputService.IsPressUp => IsEnabled && Touchscreen.current.primaryTouch.press.wasReleasedThisFrame; 
-        Vector2 IInputService.Direction => Touchscreen.current.primaryTouch.value.delta;
-        private Vector2 MousePosition => IsEnabled ? Touchscreen.current.primaryTouch.startPosition.value : Vector2.zero;
-        public bool IsPressOnUIElement {get; private set;}
-        public bool IsEnabled {get; private set;}
-        
+    public sealed class TouchInputService : IInputService, IDisposable
+    {        
+        public InputData Data => _inputData;
+        public Vector2 PointerPosition => IsGameplaySchema() ? Data.EndPosition : Vector2.zero;
+        public bool IsPressDown => IsGameplaySchema() && _control.Player.TouchContact.WasPressedThisFrame();
+        public bool IsPressed => IsGameplaySchema() && _isTouching;
+        public bool IsPressUp => IsGameplaySchema() && _control.Player.TouchContact.WasReleasedThisFrame();
+       
+        private readonly TouchControl _control;
         private InputData _inputData;
-        private int _touchCount;
-        private float _prevMagnitude;
+        private bool _isTouching;
 
-        public event Action<InputData> InputTouchEvent;
-        public event Action<float> TouchScrollEvent;
+        public event Action<InputData> InputUpdateEvent;
+        public event Action<Vector2> SwipeEvent;
 
         public TouchInputService()
         {
             _inputData = new InputData();
-            EnhancedTouchSupport.Enable();
-            
-            Enable();
+            _control = new TouchControl();
 
-        #if !UNITY_EDITOR    
-            BindMouseScroll();
-        #endif
+            EnableGameplay();
         }
 
-        private void BindMouseScroll()
+        public void Dispose()
         {
-            var scrollAction = new InputAction(binding: "<Mouse>/scroll");
-		    scrollAction.Enable();
-		    scrollAction.performed += (ctx) =>
-            {
-                if (!IsEnabled) return;
-                TouchScrollEvent(ctx.ReadValue<Vector2>().y);
-            };
-
-            var touch0contact = new InputAction
-            (
-                type: InputActionType.Button,
-                binding: "<Touchscreen>/touch0/press"
-            );
-            touch0contact.Enable();
-            var touch1contact = new InputAction
-            (
-                type: InputActionType.Button,
-                binding: "<Touchscreen>/touch1/press"
-            );
-            touch1contact.Enable();
-
-            touch0contact.performed += _ => _touchCount++;
-            touch1contact.performed += _ => _touchCount++;
-            touch0contact.canceled += _ => 
-            {
-                _touchCount--;
-                _prevMagnitude = 0;
-            };
-
-            touch1contact.canceled += _ => 
-            {
-                _touchCount--;
-                _prevMagnitude = 0;
-            };
-
-            var touch0pos = new InputAction
-            (
-                type: InputActionType.Value,
-                binding: "<Touchscreen>/touch0/position"
-            );
-
-            touch0pos.Enable();
-
-            var touch1pos = new InputAction
-            (
-                type: InputActionType.Value,
-                binding: "<Touchscreen>/touch1/position"
-            );
-
-            touch1pos.Enable();
-
-            touch1pos.performed += _ => 
-            {
-                if (!IsEnabled) return;
-                if(_touchCount < 2) return;
-
-                var magnitude = (touch0pos.ReadValue<Vector2>() - touch1pos.ReadValue<Vector2>()).magnitude;
-
-                if(_prevMagnitude == 0)
-                {
-                    _prevMagnitude = magnitude;
-                }
-
-                var difference = magnitude - _prevMagnitude;
-                _prevMagnitude = magnitude;
-
-                TouchScrollEvent?.Invoke(-difference);
-            };
+            _control.Player.Disable();
+            _control.UI.Disable();
         }
 
-        public void Enable()
+        public void EnableGameplay()
         {
-            IsEnabled = true;
+            _control.Player.Enable();
+            _control.UI.Disable();
+
+            _control.Player.TouchContact.started += OnBegan;
+            _control.Player.TouchPosition.performed += OnMoved;
+            _control.Player.TouchContact.canceled += OnEnded;
         }
 
-        public void Disable()
+        public void EnableUI()
         {
-            IsEnabled = false;
+            _control.Player.TouchContact.started -= OnBegan;
+            _control.Player.TouchPosition.performed -= OnMoved;
+            _control.Player.TouchContact.canceled -= OnEnded;
+
+            _control.Player.Disable();
+            _control.UI.Enable();
+
             ResetInput();
-        }        
-
-        private void ResetInput()
+        }      
+       
+        private bool IsGameplaySchema() => _control != null && _control.Player.enabled;
+               
+        private void OnBegan(CallbackContext context)
         {
-            _inputData.Phase = UnityEngine.InputSystem.TouchPhase.Ended;
-            _inputData.EndPosition = Vector2.zero;
-            _inputData.Direction = Vector2.zero;
-            _inputData.Distance = 0f;
-            
-            UpdateInputData();        
-        }        
+            if (!IsGameplaySchema()) return;
 
-        void ITickable.Tick()
-        {
-            if (!IsEnabled) return;            
+            _isTouching = true;          
 
-            UpdateScroll();
-            
-            foreach (var touch in Touch.activeTouches)
-            {
-                if (touch.phase == UnityEngine.InputSystem.TouchPhase.Began)
-                {
-                    OnBegan(touch);
-                }
-                else if (touch.phase == UnityEngine.InputSystem.TouchPhase.Stationary)
-                {
-                    OnStationary(touch);
-                }
-                else if (touch.phase == UnityEngine.InputSystem.TouchPhase.Moved)
-                {
-                    OnMoved(touch);
-                }
-                else if (touch.phase == UnityEngine.InputSystem.TouchPhase.Ended)
-                {
-                    OnEnded(touch);
-                }
-            }
-        }
-
-        private void UpdateScroll()
-        {
-        #if UNITY_EDITOR
-            var value = Mouse.current.scroll.ReadValue().y;
-            if (Mathf.Abs(value) > 0f)
-            {
-                TouchScrollEvent(value);
-            }
-        #endif
-        }
-        
-        public InputData GetInputDataOnTouch()
-        {
-            OnBegan(Touch.activeTouches[0]);
-            return _inputData;
-        }
-        
-        private void OnBegan(Touch touch)
-        {
-            if (IsMultitouchInput(touch)) return;
-
-            IsPressOnUIElement = false;
-
-            if (IsSelectUIElement(MousePosition))
-            {
-                IsPressOnUIElement = true;
-                return;
-            }
-
-            _inputData.Phase = touch.phase;
-            _inputData.StartPosition = touch.startScreenPosition;
+            _inputData.Phase = TouchPhase.Began;
+            _inputData.StartPosition = _control.Player.TouchPosition.ReadValue<Vector2>();
             _inputData.EndPosition = _inputData.StartPosition;
             _inputData.Direction = Vector2.zero;
             _inputData.Distance = 0f;
 
             UpdateInputData();
-        }
+        }       
 
-        private bool IsSelectUIElement(Vector2 mousePosition)
+        private void OnMoved(CallbackContext context)
         {
-            //check ui element
-            return false;
-        }
+            if (!IsGameplaySchema()) return;
 
-        private void OnMoved(Touch touch)
-        {
-            if (IsMultitouchInput(touch)) return;
-
-            _inputData.Phase = touch.phase;
-            _inputData.EndPosition = touch.screenPosition;
+            _inputData.Phase = TouchPhase.Move;
+            _inputData.EndPosition = context.ReadValue<Vector2>();
             
             var result = _inputData.EndPosition - _inputData.StartPosition;
             _inputData.Distance = result.magnitude;
@@ -215,47 +87,35 @@ namespace Assets.App.Code.Runtime.Core.Input
             UpdateInputData();
         }
 
-        private void OnEnded(Touch touch)
+        private void OnEnded(CallbackContext context)
         {
-            if (IsMultitouchInput(touch)) return;
+            if (!IsGameplaySchema()) return;
 
-            _inputData.Phase = touch.phase;
-            _inputData.EndPosition = touch.screenPosition;
+            if (!_isTouching) return;
+
+            _inputData.Phase = TouchPhase.Ended;
+            _inputData.EndPosition = _control.Player.TouchPosition.ReadValue<Vector2>();
             _inputData.Direction = Vector2.zero;
             _inputData.Distance = 0f;
-            
+
+            _isTouching = false;
+
+            UpdateInputData();
+            Swipe();
+        }  
+
+        private void ResetInput()
+        {
+            _inputData.Phase = TouchPhase.Ended;
+            _inputData.EndPosition = Vector2.zero;
+            _inputData.Direction = Vector2.zero;
+            _inputData.Distance = 0f;
+
             UpdateInputData();
         }
 
-        private void OnStationary(Touch touch)
-        {
-            if (IsMultitouchInput(touch)) return;
+        private void UpdateInputData() => InputUpdateEvent?.Invoke(_inputData);
 
-            _inputData.Phase = touch.phase;
-            _inputData.EndPosition = touch.screenPosition;
-            
-            var result = _inputData.EndPosition - _inputData.StartPosition;
-            _inputData.Distance = result.magnitude;
-            _inputData.Direction = (result == Vector2.zero) ? Vector2.zero: result / _inputData.Distance;
-            
-            UpdateInputData();
-        }
-
-        private bool IsMultitouchInput(Touch touch)
-        {
-            return touch.finger.index > 0;
-        }
-
-        private void UpdateInputData() => InputTouchEvent?.Invoke(_inputData);        
-
-        void IInputCheckApplicationFocus.OnApplicationFocus(bool isFocus)
-        {
-            if (!IsEnabled) return;
-
-            if (!isFocus)
-            {
-                ResetInput();
-            }
-        }
+        private void Swipe() => SwipeEvent?.Invoke(_inputData.EndPosition - _inputData.StartPosition);            
     }
 }

@@ -33,6 +33,8 @@ namespace Assets.App.Code.Runtime.Gameplay.UI.Screens
         {
             Root = _screenFactory.CreateHUDScreen();
 
+            //SetPickModeIgnoreForContentElement();
+
             _menuButton = Root.Q<Button>("MenuButton");            
             _scoreLabel = Root.Q<Label>("ScoreLabel");            
             _boxCountLabel = Root.Q<Label>("BoxCountLabel");            
